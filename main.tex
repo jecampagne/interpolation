@@ -1,0 +1,1056 @@
+\documentclass[11pt,twoside]{article}
+\usepackage{chadstyle}  % Loads my formatting 
+\usepackage{aas_macros} % macro pour Bibtex
+\usepackage{longtable,booktabs}
+\usepackage{stmaryrd}
+%%%%%%%%\usepackage{mdframed}
+\usepackage{titlesec}
+%\usepackage{hyperref}
+%\usepackage[colorlinks,allcolors=blue]{hyperref}
+%%%%%%%%%\usepackage{amsthm}
+\usepackage{bbm}
+\usepackage{ftnxtra}
+\usepackage{fnpos}
+\usepackage{multirow}
+\usepackage{fontawesome}
+\usepackage{ulem}
+
+\usepackage{bigints}
+%%%%\usepackage[lite]{mtpro2}
+\usepackage{physics}
+\usepackage{scalerel}
+\usepackage{mathrsfs}
+\usepackage{empheq}
+
+\usepackage{extarrows}
+\usepackage{oubraces}
+\usepackage{bm} % bold greak letters
+
+%for algo
+\usepackage{algorithm,algorithmic}
+%\usepackage[noend]{algpseudocode}
+%\algrenewcommand\algorithmicindent{0.5em}%
+
+
+\usepackage{lmodern}
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\usepackage{csquotes}
+
+%\usepackage{tweaklist}  % I use this package as well; you may need to download
+
+%% Shortcut commands
+
+\usepackage[svgnames]{xcolor}%
+
+\definecolor{maroon}{cmyk}{0, 0.87, 0.68, 0.32}
+\definecolor{halfgray}{gray}{0.55}
+\definecolor{ipython_frame}{RGB}{207, 207, 207}
+\definecolor{ipython_bg}{RGB}{247, 247, 247}
+\definecolor{ipython_red}{RGB}{186, 33, 33}
+\definecolor{ipython_green}{RGB}{0, 128, 0}
+\definecolor{ipython_cyan}{RGB}{64, 128, 128}
+\definecolor{ipython_purple}{RGB}{170, 34, 255}
+
+
+\usepackage[amsmath]{ntheorem}
+\usepackage[ntheorem]{mdframed}
+\newmdtheoremenv[linewidth=5pt, linecolor=Gainsboro!75!Lavender, topline=false, bottomline=false, skipabove=15pt, skipbelow=20pt]{thm}{\color{ChadBlue}Théorème}
+
+\newmdtheoremenv[linewidth=5pt, linecolor=Gainsboro!75!Lavender, topline=false, bottomline=false, skipabove=15pt, skipbelow=20pt]{lemme}{\color{ChadBlue}Lemme}
+
+\newmdtheoremenv[linewidth=5pt, linecolor=Gainsboro!75!Lavender, topline=false, bottomline=false, skipabove=15pt, skipbelow=20pt]{definition}{\color{ChadBlue}Définition}
+
+\newmdtheoremenv[linewidth=5pt, linecolor=Gainsboro!75!Lavender, topline=false, bottomline=false, skipabove=15pt, skipbelow=20pt]{propriete}{\color{ChadBlue} Propriété}
+
+
+%   \theoremclass{Theorem}
+%\newtheorem{proposition}{\color{ChadBlue} Théorème}
+%\newtheorem{lemme}{\color{ChadBlue} Lemme}
+%\newtheorem{definition}{\color{ChadBlue} Définition}
+
+\newcommand{\Proof}[2]{{\hspace{-\parindent} {\color{ChadBlue}\bf Démonstration}~\ref{#1}.}
+{#2}\hfill$\blacksquare$ \\ \vspace{.1in}}
+
+%\newcosecnumdepthmmand{\proptitle}[1]{\color{ChadBlue} \textnormal{(#1):}}
+%\newtheorem{proposition}{\color{ChadGreen} Proposition}
+%\newcommand{\assume}[2]{{\bf{Assumption #1}} (#2)} 
+%\newcommand{\clr}[1]{{\color{ChadBlue} #1}}
+%\newcommand{\clrg}[1]{{\color{ChadGreen} #1}}
+%\newcommand{\Proof}[2]{\newline {\hspace{-\parindent} {\color{ChadGreen}\bf Proof of Proposition}~\ref{#1}.}
+%{\color{ChadBlue} #2} \vspace{.1in}}
+
+% If you've loaded *tweaklist.sty* above, uncomment these lines:
+% Adjust spacing in itemize/enumerate; see tweaklist.sty
+%\renewcommand{\enumhook}{\setlength{\topsep}{2pt}%
+%  \setlength{\itemsep}{0pt}}
+%\renewcommand{\itemhook}{\setlength{\topsep}{2pt}%
+%  \setlength{\itemsep}{0pt}}
+
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[shorthands=off,main=french]{babel}
+\else
+    % See issue https://github.com/reutenauer/polyglossia/issues/127
+  \renewcommand*\familydefault{\sfdefault}
+    % load polyglossia as late as possible as it *could* call bidi if RTL lang (e.g. Hebrew or Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[]{french}
+\fi
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{0pt}{0pt}
+%{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\usepackage{setspace}
+\setstretch{1.2}
+
+%eviter les lignes blanches
+\raggedbottom
+
+\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+%\newcommand*\widefbox[1]{{\setlength\fboxsep{10pt}\fbox{\hspace{0.5em}#1\hspace{0.5em}}}}
+
+\newcommand{\lanczos}{\texttt{Lanczos}}
+\newcommand{\sklearn}{\texttt{scikit-learn}}
+\newcommand{\itemb}{\item[$\bullet$]}
+\newcommand*\textitbf[1]{\textit{\textbf{#1}}}
+%\def\boxcar{{\mbox{$\Pi$}}}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiterX{\Iintv}[1]{\llbracket}{\rrbracket}{\iintvargs{#1}}
+\NewDocumentCommand{\iintvargs}{>{\SplitArgument{1}{,}}m}
+{\iintvargsaux#1} %
+\NewDocumentCommand{\iintvargsaux}{mm} {#1\mkern1.5mu..\mkern1.5mu#2}
+\newcommand{\fcc}[1]{\widehat{#1}^{\raisebox{1pt}{\,\scriptsize$\ast$}}}
+
+\newcommand{\Av}[1] {\underset {#1} {\rm Ave}\,}
+%\newcommand{\sinc}{\mathrm{sinc}}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\sincp}{sincp}
+\DeclareMathOperator{\D}{D}
+\DeclareMathOperator{\comb}{\raisebox{\depth}{\rotatebox{270}{$\exists$}}}
+\DeclareMathOperator{\boxcar}{{\mbox{$\Pi$}}}
+\DeclareMathOperator{\Si}{Si}
+%\DeclareMathOperator{\si}{si}
+
+\newcommand{\nn}{\nonumber}
+
+
+\usepackage{stackengine}
+%\stackMath
+%\def\hatgap{2pt}
+%\def\subdown{-2pt}
+%\newcommand\reallywidehat[2][]{%
+%\renewcommand\stackalignment{l}%
+%\stackon[\hatgap]{#2}{%
+%\stretchto{%
+%    \scalerel*[\widthof{$#2$}]{\kern-.6pt\bigwedge\kern-.6pt}%
+%    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+%}{0.5ex}% THIS SQUEEZES THE WEDGE TO 0.5ex HEIGHT
+%_{\smash{\belowbaseline[\subdown]{\scriptstyle#1}}}%
+%}}
+\stackMath
+\newcommand\reallywidehat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern.1pt\mathchar"0362\kern.1pt}%
+    {\rule{0ex}{\textheight}}%WIDTH-LIMITED CIRCUMFLEX
+  }{\textheight}% 
+}{2.4ex}}%
+\stackon[-6.9pt]{#1}{\tmpbox}%
+}
+\newcommand{\nblink}[1]{\href{https://github.com/jecampagne/ML-toys/blob/main/#1.ipynb}{\faFileCodeO}}
+
+
+\usepackage{indentfirst}
+%\setlength{\parindent}{1.5cm}
+
+\usepackage{listings}
+
+
+\lstset{
+    breaklines=true,
+    %
+    extendedchars=true,
+    literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+    {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+    {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+    {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+    {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+    {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+    {€}{{\EUR}}1 {£}{{\pounds}}1
+}
+
+\lstdefinelanguage{iPython}{
+    morekeywords={access,and,break,class,continue,def,del,elif,else,except,exec,finally,for,from,global,if,import,in,is,lambda,not,or,pass,print,raise,return,try,while},%
+    %
+    % Built-ins
+    morekeywords=[2]{abs,all,any,basestring,bin,bool,bytearray,callable,chr,classmethod,cmp,compile,complex,delattr,dict,dir,divmod,enumerate,eval,execfile,file,filter,float,format,frozenset,getattr,globals,hasattr,hash,help,hex,id,input,int,isinstance,issubclass,iter,len,list,locals,long,map,max,memoryview,min,next,object,oct,open,ord,pow,property,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,vars,xrange,zip,apply,buffer,coerce,intern},%
+    %
+    sensitive=true,%
+    morecomment=[l]\#,%
+    morestring=[b]',%
+    morestring=[b]",%
+    %
+    morestring=[s]{'''}{'''},% used for documentation text (mulitiline strings)
+    morestring=[s]{"""}{"""},% added by Philipp Matthias Hahn
+    %
+    morestring=[s]{r'}{'},% `raw' strings
+    morestring=[s]{r"}{"},%
+    morestring=[s]{r'''}{'''},%
+    morestring=[s]{r"""}{"""},%
+    morestring=[s]{u'}{'},% unicode strings
+    morestring=[s]{u"}{"},%
+    morestring=[s]{u'''}{'''},%
+    morestring=[s]{u"""}{"""},%
+    %
+    % {replace}{replacement}{lenght of replace}
+    % *{-}{-}{1} will not replace in comments and so on
+    literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+    {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+    {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+    {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+    {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+    {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+    {€}{{\EUR}}1 {£}{{\pounds}}1
+    %
+    {^}{{{\color{ipython_purple}\^{}}}}1
+    {=}{{{\color{ipython_purple}=}}}1
+    %
+    {+}{{{\color{ipython_purple}+}}}1
+    {-}{{{\color{ipython_purple}-}}}1
+    {*}{{{\color{ipython_purple}$^\ast$}}}1
+    {/}{{{\color{ipython_purple}/}}}1
+    %
+    {+=}{{{+=}}}1
+    {-=}{{{-=}}}1
+    {*=}{{{$^\ast$=}}}1
+    {/=}{{{/=}}}1,
+    literate=
+    *{-}{{{\color{ipython_purple}-}}}1
+     {?}{{{\color{ipython_purple}?}}}1,
+    %
+    identifierstyle=\color{black}\ttfamily,
+    commentstyle=\color{ipython_cyan}\ttfamily,
+    stringstyle=\color{ipython_red}\ttfamily,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    %
+    rulecolor=\color{ipython_frame},
+    frameround={t}{t}{t}{t},
+    numbers=none,
+    numberstyle=\tiny\color{halfgray},
+    %
+    %
+    backgroundcolor=\color{ipython_bg},
+    %   extendedchars=true,
+    %basicstyle=\scriptsize,
+    basicstyle=\ttfamily\footnotesize,
+    columns=fullflexible,
+    keywordstyle=\color{ipython_green}\ttfamily,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx} % Required for inserting images
+\graphicspath{{figures/}}
+
+
+\title{Quelques noyaux interpolateurs pour des opérations sur des images}
+\author{Jean-Eric Campagne}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\renewcommand{\baselinestretch}{0.75}\normalsize
+\tableofcontents
+\renewcommand{\baselinestretch}{1.0}\normalsize
+
+\section{Introduction}
+\label{sec:Intro}
+%
+La manipulation des images à des fins scientifiques  en astro est une opération courante. C'est un euphémisme de dire que ce n'est pas le seul champ disciplinaire qui transforme des images, le dernier en date étant peut-être  celui des réseaux sociaux comme Facebook, X (ex. Tweeter), Instagram, TikTok, etc. D'ailleurs, cela devient un problème majeur dans le cadre de la désinformation. Ceci dit, revenons aux images du Ciel avec des étoiles, des galaxies et autres objets d'études. Nous savons qu'elles sont pixelisées, c'est-à-dire qu'elles représentent une version échantillonnée sur une grille 2D (régulièrement espacée par hypothèse) d'une fonction continue plus ou moins régulière. Cependant, dans bien des cas, il nous faut obtenir à partir de cette version pixelisée, non seulement une version continue, mais le plus souvent dans l'espace de Fourier. On peut penser en effet, à l'extraction de Point Spread Function (PSF) afin d'obtenir la "vraie" image du Ciel \citep{2011ASPC..442..435B}, à la préparation de lots d'images de référence au format identique, par exemple utilisés pour 
+l'apprentissage de réseaux convolutionnels appliqués à la détermination de redshifts photométriques \citep{2019A&A...621A..26P}, qui nécessite des opérations de ré-échantillonnages, co-additions etc. Ces applications ont tout particulièrement été mises à disposition des astronomes dans une suite de logiciels mis en oeuvre par E. Bertin et collaborateurs depuis environ 25 ans comme \textsf{SExtractor} \citep{1996A&AS..117..393B} et  le pipeline \textsf{TERAPIX} \citep{2002ASPC..281..228B}. Il y a aussi des usage à des fins de simulations réalistes de nouveaux surveys où l'on intègre par exemple des effets de nouvelles PSF et autres artefacts instrumentaux, tout comme des effets de lentillages gravitationnels à des fins de préparations aux analyses comme par exemple le lentillage faible (Weak Lensing) particulièrement sensible à la morphologie des galaxies. Un tel software de simulation est par exemple \textsf{GalSim} \citep{2015A&C....10..121R}.
+
+La représentation continue d'une image pixelisée se fait par l'intermédiaire d'un noyau interpolateur. Si l'on pense à des noyaux dans l'espace réel, le point qui va nous occuper, c'est que nous avons également besoin d'un interpolateur dans le domaine de Fourier, et qu'il nous faut pouvoir faire les opérations à un coût en termes de temps de calcul le plus faible possible, tout en respectant une précision nécessaire afin de ne pas obérer l'usage en cosmologie du WL par exemple. Dans ce cadre, je rappellerai le théorème fondamental de  Whittaker-Nyquist-Shannon qui est certes parfait sous certaines conditions mais qui n'est pas praticable en l'état, pour faire court \textit{il nous faut des approximations du sinus cardinal}. Je vais m'inspirer de l'article \cite{2014PASP..126..287B} qui a été le point de départ de ma réflexion. 
+%
+\section{Quelques notations et définitions}
+\label{sec:Def}
+%
+Dans un premier temps, nous nous placerons en dimension 1 pour simplifier les notations. Nous verrons ensuite comment l'extension à des dimensions supérieures peut se faire. Soit donc une fonction $f(x)$ que l'on échantillonne sur une grille régulière de $\mathbb{Z}$, ce qui fixe le pas d'échantillonnage $\Delta_x=1$ c'est-à-dire l'unité de mesure dans l'espace réel. On note alors $\{a_i\}_N$ avec $i=\{-N/2,-N/2+1,\dots,N/2-1\}\equiv\Iintv{-N/2,N/2-1}$ les valeurs de $f(i)$. Il est supposé que le nombre d'échantillons $N$ est paire\footnote{Dans un premier temps pour $N$ impaire, on peut toujours compléter la liste  $\{a_i\}_N$ avec un 0.} pour faciliter les notations. Si on introduit la "fonction" de Dirac $\delta(x)$, on peut associer à $f$ une forme \textit{discrétisée} $f_d$ telle que
+\begin{equation}
+f_d(x) = \sum_{j=-N/2}^{N/2-1} a_j\ \delta(x-j)
+\label{eq:fdreal}
+\end{equation}
+Une forme \textit{interpolée} de $f$ avec un noyau (kernel) $K_x$ de son coté est identifiée comme:
+\begin{equation}
+F(x) = (f_d \ast K_x)(x) = \sum_{j=-N/2}^{N/2-1} a_j\ K_x(x-j)
+\label{eq:Freal}
+\end{equation}
+où l'opérateur $\ast$ est celui de la convolution dans le domaine continu. 
+
+Pour entrer dans le domaine de Fourier, il nous faut préciser quelques conventions. On suppose que les fonctions sous-jacentes aux processus étudiés sont d'énergie finie. Alors, l'analyse de Fourier représente une fonction comme une somme de sinusoïdes complexes, et je prends la définition suivante\footnote{Rq. par rapport à \citep{2014PASP..126..287B}, je note la TF et les coefficients de DFT via un $\hat{}$ et non un $\tilde{}$.}: 
+\begin{align}
+f(x) &= \int_{-\infty}^\infty \hat{f}(u)\ e^{2\pi i xu} du &
+\hat{f}(u) &= \int_{-\infty}^\infty f(x)\ e^{-2\pi i xu} dx 
+\label{eq:TF}
+\end{align}
+En appendice vous trouverez d'autres conventions: par exemple celle ci-dessus correspond à $(a=0, b=-2\pi)$ tandis que \cite{10.5555/1525499} utilise la convention $(a=1, b=-1)$. De même concernant la Discrete Fourier Transform (DFT), nous choisissons
+\begin{align}
+a_j &= \frac{1}{N}\sum_{k=-N/2}^{N/2-1} \hat{a}_k e^{2\pi i jk/N} &
+\hat{a}_k &= \sum_{j=-N/2}^{N/2-1} a_j e^{-2\pi i jk/N}
+\label{eq:DFT}
+\end{align}
+avec la famille $\{e_k(.)=e^{2\pi i k/N\, .}_k \}_{-N/2 \leq k<N/2}$ étant une base orthogonale des signaux de période $N$.
+%
+\section{Théorème d'échantillonnage: le sinus cardinal}
+%
+Avant de donner le théorème dit de Whittaker-Nyquist-Shannon, on peut ouvrir une petite parenthèse. Claude Shannon (1916-2001) dans son article de 1949 \citep{1697831} cite entres autres un article de Denis Gabor (1900-79) de 1946 \citep{gabor1946} qui traite de Théorie de l'Information, un autre  de Harry Nyquist (1889-1976) de 1928 \citep{Nyquist1928CertainTI} centré sur la transmission "télégraphique" ainsi qu'un livre du mathématicien John Macnaghten  Whittaker (1905-84) de 1935 \citep{whittaker1949interpolatory}. Mais c'est le père de John M., Edmund Taylor Whittaker (1873-1956) lui-même mathématicien qu'il aurait fallu cité pour son article de 1915 \citep{whittaker_1915} car c'est lui qui à démontrer le théorème en question\footnote{E.T Whittaker montre que l'interpolation par les polynômes de Lagrange tend sur les échantillons $-N,\dots,N$ tend vers la formulation de avec le sinus cardinal quand $N$ tend vers l'infini.}. Maintenant plonger dans l'origine de ce théorème et les nombreuses preuves antérieures à celle de Shannon, est un travail en soit. Refermons cette parenthèse d'histoire, cependant si cela vous intéresse, vous pourrez par exemple lire l'article de \cite{Dodson2002}.
+
+En fait, pour pouvoir envisager qu'une interpolation de $f$ reflète un tantinet son évolution entre les échantillons pris sur la grille $\mathbb{Z}$, il faut faire des hypothèses de régularité. Dans le cas du théorème de Whittaker-Nyquist-Shannon, la régularité vient d'une condition sur le spectre de Fourier de $f$.
+\begin{thm}
+Si l'on suppose que le spectre de Fourier de $f$ est inclus dans $[-1/2,1/2]$ alors
+\begin{equation}
+f(x) = \sum_{j=-\infty}^{\infty} f(j)\ \sinc(x-j) \quad \mathrm{avec} \quad
+\sinc(x)= \frac{\sin(\pi x)}{\pi x}
+\end{equation}
+\label{th:sampling}
+\end{thm}
+\textit{\small Remarquons que  si l'on change l'échelle dans l'espace réel telle que l'échantillonnage de $f$ se fait à la fréquence $\nu_e=1/T_e$ (on recueille les échantillons $f(i T_e)$), alors la condition du théorème fixe le spectre de Fourier à devoir être contenu dans l'intervalle $[-\nu_e/2,\nu_e/2]$. C'est-à-dire que la fréquence d'échantillonnage et la fréquence maximale du spectre Fourier $\nu_{max}$ doivent satisfaire la condition de Nyquist, $\nu_e \geq 2\nu_{max}$, bien connue de toutes les personnes qui opèrent dans le domaine du traitement de signal.
+}
+
+Il est intéressant de brosser une démonstration de ce théorème emblématique. Si l'on définit la "fonction" $f_d$ comme à la section précédente mais cette fois selon
+\begin{equation}
+f_d(x) = \sum_{j=-\infty}^{\infty} f(i)\ \delta(x-j)
+\end{equation}
+alors on peut calculer sa transformée de Fourier $\hat{f_d}(u)$ en faisant remarquer que
+\begin{align}
+f_d(x) = \sum_{j=-\infty}^{\infty} f(x)\ \delta(x-i) =  f(x)\ \comb(x) 
+\end{align}
+où $\comb(x)$ est le peigne de Dirac 
+\begin{equation}
+\comb(x) = \sum_{j=-\infty}^{\infty}\delta(x-i)\quad \mathrm{avec\ la\ propriété}\quad  \comb(u) =\hat{\comb}(u)= \sum_{j=-\infty}^{\infty}e^{2\pi i j u}
+\end{equation}
+
+Donc, en se rappelant de la relation entre convolution et transformée de Fourier (cf. Appendix Tab.~\ref{tag-2020-TFconv}) pour la convention choisie 
+\begin{align}
+\hat{f_d}(u) &= (\hat{f} \ast \hat{\comb})(u) = (\hat{f} \ast \comb)(u) \label{eq:fdhatcont}\\
+&= \int \hat{f}(v)\ \comb(u-v) dv = \int \hat{f}(v) \sum_{j=-\infty}^{\infty} \delta(u-v-j) \nonumber \\
+&= \sum_{j=-\infty}^{\infty} \hat{f}(u-j)
+\end{align}
+Ainsi $\hat{f_d}$ est une fonction périodique de période 1. La condition du théorème sur le spectre de $\hat{f}$, nous dit que le support de  $\hat{f}(u-j)$ ($j\neq 0$) est $[j-1/2,j+1/2]$ qui n'empiète pas sur celui de $\hat{f}$, donc 
+\begin{equation}
+\hat{f_d}(u) = \hat{f}(u) \quad \forall u \in [-1/2,1/2]
+\end{equation}
+En fait l'hypothèse fait en sorte que le spectre de Fourier de $f_d$ et $f$ coïncide sur l'intervalle $[-1/2,1/2]$. Ce qui peut s'écrire aussi
+\begin{equation}
+\hat{f}(u)  = \hat{f_d}(u)\ \boxcar(u)
+\end{equation}
+avec
+\begin{equation}
+ \boxcar(x) = \begin{cases}
+ 1 & |u|<1/2 \\
+1/2 & |u|=1/2 \\
+0 & |u| > 1/2
+ \end{cases} \quad \mathrm{et\ nous\ avons}\quad \hat{\boxcar}(u) = \sinc(u)
+\end{equation}
+En repassant dans le domaine réel, on en déduit alors que
+\begin{align}
+f(x) & = (f_d \ast \hat{\boxcar})(x) = (f_d \ast \sinc)(x) = \int f_d(y)\sinc(y-x) dy \nn \\
+	&= \int \sum_{j=-\infty}^{\infty} f(y) \delta(y-j) \sinc(x-y) dy \nn \\
+	&= \sum_{j=-\infty}^{\infty} f(j)\ \sinc(x-j)
+\end{align}
+ce qui constitue le résultat du théorème.
+
+Durant cette démonstration, on a introduit les distributions au sens de Schwartz $\delta$, $\comb$ et des fonctions $\boxcar$, $\sinc$ qui vont nous servir par la suite. Le théorème en lui-même nous invite à le regarder sous plusieurs angles comme l'interpolation (domaine des mathématiques) et le filtrage (domaine de l'ingénierie). L'article de Shannon est un lien entre les deux visions. 
+
+Coté interpolation, si l'on définit l'ensemble des fonctions d'énergie finie à spectre de Fourier borné, ex:
+\begin{equation}
+V = \left\{ f \in L_2(\mathbb{R})\ tq.\ \mathrm{Support}\ f \subset [-1/2,1/2]\right\}
+\end{equation}
+alors la famille $\{\phi_n(x)=\sinc(x-n)\}_{n\in\mathbb{Z}}$ est une base orthogonale de $V$. En effet, toutes sont membres de $V$ et le produit scalaire entre deux membres $\phi_n$ et $\phi_m$ donne par la formule de Plancherel $\delta(m-n)$. Or, l'approximation optimale linéaire\footnote{nb. on entend par là que l'approximation d'une combinaison linéaire de $f$ et $g$, est la même combinaison linéaire des approximations de $f$ et de $g$ calculées séparément.} de $f$ dans l'espace $V$ est la projection orthogonale: 
+\begin{equation}
+P_V[f](x) =  \sum_{j=-\infty}^{\infty} \langle f, \phi_n\rangle \phi_n(x)
+\end{equation}
+Le produit scalaire se calcule aisément en se référant à la table \ref{tag-2020-TFconv}:
+\begin{align}
+\langle f, \phi_n\rangle &= \int_{-\infty}^\infty f(x) \phi_n(x-n) dx = \int_{-\infty}^\infty \hat{f}(u) \reallywidehat{\sinc(x-n)}^\ast(u) du \nn\\
+&= \int_{-\infty}^\infty \hat{f}(u)\ e^{2\pi i u n}\ \boxcar(u) du = \int_{-1/2}^{1/2} \hat{f}(u) e^{2\pi i u n} du
+\end{align}
+Or, c'est là où l'on mesure l'impact de la condition du théorème, si le spectre de Fourier de $f$ est contenu dans $[-1/2,1/2]$, elle appartient à l'ensemble $V$ et l'on peut étendre les bornes de la dernière l'intégrale ci-dessus pour faire apparaître
+\begin{equation}
+\langle f, \phi_n\rangle = \int_{-\infty}^{\infty} \hat{f}(u) e^{2\pi i u n} du = f(n)
+\end{equation} 
+et l'on retrouve la formule du théorème. On peut étendre ce raisonnement de projection orthogonale sur d'autres types d'ensembles afin d'obtenir des approximations de $f$. C'est entres autres le sujet par exemple du Cours de 2021 de S. Mallat \citep{JECMallat21}.  
+
+Coté filtrage, Le sinus cardinal est un filtre passe-bas idéal. On sait que réaliser ce filtre en pratique n'est pas possible, et toute imperfection donne lieu à des artéfacts de reconstruction comme le phénomène de Gibbs. De plus en pratique également la fréquence d'échantillonnage n'est pas forcément suffisamment grande pour dépasser la fréquence maximale du spectre de Fourier, et il faut donc procéder également à un pré-filtrage du signal afin de ne pas être soumis au phénomène d'aliasing.
+
+Ce qu'on peut retenir de ces considérations est que $\sinc$ est un interpolateur correspondant au filtre idéal passe-bas, et qu'il est la brique élémentaire pour constituer une base orthogonale de l'ensemble des fonctions de spectre de Fourier limité. Si l'on veut obtenir une approximation différente, cela revient à définir un nouvel ensemble d'approximation, avec une nouvelle base orthogonale, et une nouvelle brique élémentaire (noyau interpolateur). Ces noyaux peuvent par exemple prendre la forme d'approximation à support compact de $\sinc$ dans l'espace réel ou de $\boxcar$ dans l'espace de Fourier, voir même combiner des propriétés de régularité dans les deux espaces. Avant d'envisager de tels interpolateurs nous allons creuser un peu plus les relations entre $f_d$ et $F$ introduites dans la section précédente. Avant faisons une extension simple mais pratique du théorème d'échantillonnage en dimension supérieure à 1.
+%
+\section{Le cas 2D pour les images}
+\label{sec:2D}
+%
+Le cas 2D à grille régulière est une généralisation simple du cas 1D car il y a séparation des variables. Le théorème d'échantillonnage (Th.~\ref{th:sampling}) devient en adaptant la condition sur le spectre de Fourier 2D qui est contenu dans la boite $[-1/2,1/2]^2$  $(x\in\mathbb{R}^2)$:
+\begin{equation}
+f(x) = \sum_{j\in\mathbb{Z}^2} f(j)\ \sinc(x-j)
+\end{equation}
+avec
+\begin{equation}
+\sinc(x)\equiv \sinc(x_1,x_2) = \sinc(x_1)\sinc(x_2)
+\end{equation}
+On a donc un interpolateur idéal $\sinc(x)$ qui est le produit cartésien des interpolateurs idéaux sur chacune des dimensions, $\sinc(x_i)$ $i=1,2$. Concernant les relations/définitions données dans la section \ref{sec:Def}, on utilise par la suite des interpolateurs de type \textit{produit cartésien} d'interpolateurs 1D. On parle par exemple d'interpolateur  bi-linéaire, bi-cubique utilisant des interpolateurs linéaires, cubiques, etc. 
+%
+\section{Pourquoi des interpolateurs de taille finie?}
+\label{sec:interpFinite}
+%
+Nous avons motivé dans l'introduction de pouvoir obtenir des expressions dans l'espace de Fourier. Et nous avons affaire à des fonctions dont on ne connait que $N$ échantillons. De l'expression de $F(x)$ (Eq.~\ref{eq:Freal}), on en déduit que
+\begin{equation}
+\hat{F}(u) = \hat{f_d}(u)\ \hat{K_x}(u)
+\end{equation}
+Or, 
+\begin{align}
+\hat{f_d}(u) &= \sum_{j=-N/2}^{N/2-1} a_j\ \reallywidehat{\delta(x-j)}(u) = \sum_{j=-N/2}^{N/2-1} a_j\  e^{-2\pi i j u} \nn \\
+&= \sum_{j=-N/2}^{N/2-1}  \frac{1}{N}\sum_{k=-N/2}^{N/2-1} \hat{a}_k e^{2\pi i j(k/N-u)} \nn \\
+&=  \sum_{k=-N/2}^{N/2-1} \hat{a}_k  \D_N(u-k/N)
+\label{eq:hatfdfini}
+\end{align}
+Donc $\hat{f_d}$ est la convolution de la fonction qui prend ses échantillons de la DFT de $f$ (c'est-à-dire les $\{\tilde{a}_k\}$) aux points $u_k=k/N$ et d'un noyau $D_N$. Quel est son expression? Nous avons
+\begin{align}
+\D_N(x) =  \frac{1}{N}\sum_{j=-N/2}^{N/2-1} e^{-2\pi i j x} = e^{i\pi x} \frac{\sin(N \pi x)}{N \sin(\pi x)} = e^{i\pi x} \frac{\sinc(N x)}{\sinc(x)}
+\end{align}
+Sa transformée de Fourier s'écrit:
+\begin{equation}
+\widehat{\D_N}(u) = \frac{1}{N}\sum_{j=-N/2}^{N/2-1}\delta(j+u)
+\end{equation}
+Notons le lien avec le noyau de Dirichlet et de Fejèr qui jouent un rôle dans les sommes partielles des Séries de Fourier et dont les définitions sont 
+\begin{align}
+D_n(x) &= \sum_{j=-n}^{n} e^{-2\pi i j x} &  F_n(x) &= \frac{1}{n}\sum_{k=0}^{n-1} D_k(x) = \frac{1}{n}\left(\frac{\sin(nx/2)}{\sin(x/2)} \right)^2
+\end{align}
+Le noyau $\D_N$ est aussi appelé \textitbf{sinus cardinal périodique} de période 1 ou bien la \textit{forme repliée du sinus cardinal}. Quelques exemples de graphes du module de $D_N$ sont présentés sur la figure \ref{fig-DN}.
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{fig1.png}
+\caption{Le module de $\D_N$ pour quelques valeurs de $N$.}
+\label{fig-DN}
+\end{figure}
+%Le lien avec la section précédente peut être fait concernant les équations \ref{eq:hatfdfini} et \ref{eq:fdhatcont} quand on utilise le résultat suivant. Au sens des distributions $\lim_{N\rightarrow\infty}\comb_N=\comb$, donc $\lim_{N\rightarrow\infty}\widehat{\D_N}=\comb$ et l'on peut déduire alors également que $\lim_{N\rightarrow\infty}\D_N=\comb$. Notons au passage que la convolution de $f$ avec le noyau de Dirichlet n'est autre que sa représentation en Série de Fourier.
+
+Maintenant, faisons un peu de comptabilité pour estimer les besoins afin d'obtenir les échantillons de $\hat{F}(u)$ dans le cas d'une grille 2D ($u_k$ de taille $M\times M$) pour  ce placer dans le cadre d'une image:
+\begin{enumerate}
+\item effectuer la DFT pour obtenir les $N^2$ valeurs $\tilde{a}_{k}$ (ici $k=(k_1,k_2)$), en utilisant un algorithme de type FFT, nécessite typiquement $O(N^2\log N)$ opérations;
+\item ensuite pour effectuer 1 convolution (Eq.~\ref{eq:hatfdfini}), il nous faire faire $N^2$ multiplications et $2N$ additions, donc en gros pour obtenir tous les coefficients $\hat{f_d}(u_k)$, il nous faut faire $O((MN)^2)$ opérations;
+\item puis il nous faut $O(M^2)$ opérations pour multiplier par les coefficients $\hat{K_x}(u_k)$.
+\end{enumerate}
+Si on veut terminer la chaîne d'analyse en revenant dans l'espace réel, il nous faut ajouter une DFT inverse qui nécessite $O(M^2\log M)$ opérations. Notons que l'on pourrait également rajouter d'autres tâches pour tenir compte de PSF différentes entre l'image d'origine et l'image finale, et de toutes les transformations (linéaires ou pas) dans l'espace de Fourier pour tenir compte des effets de cisaillement gravitationnel, et autres opérations/transformations géométriques (astronométriques) pour par exemple permettre une co-addition d'images. Cependant, le point critique est le second de la liste ci-dessus.
+
+Si, l'on dispose d'un noyau/interpolant de taille fini qui ne nécessite que $n\leq N$ points en 1D ($n^2$ en 2D) pour remplacer $\D_N$ alors $O(M^2N^2)$ se réduit à $O(n^2 M^2)$, on y gagnerait grandement. Le point délicat est comme nous l'avons déjà mentionné, tout approximation de l'interpolateur idéal $\sinc$ dans l'espace réel, ou du noyau $\D_N$ utilisé dans l'espace de Fourier, se paye par des artéfacts qu'il faut pouvoir maitriser. Il nous faut donc des conditions de régularités dans l'espace réel et l'espace de Fourier. 
+%
+\section{Le remplacement du noyau $\D_N$ dans l'espace de Fourier}
+\label{sec:DNapprox}
+%
+Comme nous l'avons motivé dans l'introduction, il nous faut dans un premier temps nous focaliser sur l'espace de Fourier. Et comme nous l'avons examiné dans la section précédente, il nous faut obtenir un noyau $K_u$ de taille bien inférieure à $N$, le nombre d'échantillons (1D) de la grille d'origine, qui remplacera le noyau $\D_N$ dans l'équation \ref{eq:hatfdfini} dans le calcul de $\hat{f_d}(u)$. Mais quel est le prix à payer d'utiliser $K_u$ en lieu et place de $\D_N$ qui est le noyau parfait/idéal dans cette opération?
+
+Imaginons une fonction $f(x)$ dont 1 seul échantillon sur les $N$ est non nul: $a_n=1$. Ainsi, 
+\begin{equation}
+f_d(x) = \delta(x-n) \Rightarrow \hat{f_d}(u) = e^{-2\pi i n u}
+\end{equation} 
+De plus, les coefficients de la DFT de $f$ satisfont:
+\begin{equation}
+\forall k\in\Iintv{-N/2,N/2-1},\quad \hat{a}_k = e^{-2\pi i n k/N}
+\end{equation}
+ce qui peut être vu comme un échantillonnage de la fonction $\hat{f_d}(u)$ au point $u_k=k/N$ d'une grille régulièrement espacée de $1/N$ dans l'intervalle $[-1/2,1/2]$. 
+
+Pour facilité les calculs comme dans le cas du théorème d'échantillonnage, on étend les valeurs de $ \hat{a}_k$ au-delà de l'intervalle $\Iintv{-N/2,N/2-1}$, et en relation avec l'équation \ref{eq:hatfdfini} définissons la fonction
+\begin{align}
+\hat{s}(u) &= \sum_{k=-\infty}^{\infty} \hat{a}_k K_u(u-k/N) = \sum_k K_u(u-k/N) e^{-2\pi i k n/N}
+\label{eq:Su1}
+\end{align}
+On sait que le théorème d'échantillonnage nous dit qu'avec un échantillonnage de $\Delta=1/N$, alors le filtre/noyau optimal est le sinus cardinal proprement adapté à la taille $\Delta$, soit $\sinc(u/\Delta)=\sinc(Nu)$. \textit{Rq. le filtre $\D_N$ est la version optimale avec des fonctions échantillonnées sur un intervalle fini.}
+
+
+Ouvrons une parenthèse sous forme d'un petit lemme. 
+\begin{lemme}
+Soit, la fonction  $h(x)=e^{2\pi i \nu x}$ et un noyau $K$ interpolateur qui définit une approximation $H$ par convolution, alors on a la relation
+\begin{align} 
+H(x) &= 	h(x) E(\nu,x) &  E(\nu,x)&=\sum_{j=-\infty}^\infty \hat{K}(\nu+j)\  e^{2\pi i jx}
+\end{align}
+Si de plus l'on exige que $H(0)=h(0)$ alors
+\begin{equation}
+E(\nu,0)=\sum_{j=-\infty}^\infty \hat{K}(\nu+j) = 1
+\label{eq:hatKclosure}
+\end{equation}
+ce qui fixe également que $H(x)=h(x)$ pour tout $x\in\mathbb{Z}$.
+\label{lem:interpSinusoide}
+\end{lemme}
+
+La démonstration se sert des éléments de la démonstration du théorème d'échantillonnage (Th.~\ref{th:sampling}).  On peut en effet directement écrire que:
+\begin{equation}
+H(x) = (K(t)\ast [h(t)\comb(t)])(x) = \sum_{j=-\infty}^\infty h(j) K(x-j)
+\end{equation}
+qui apparait comme l'interpolation de $h$ avec le noyau $K$. Soit donc $h(t)=e^{2\pi i \nu t}$, la Transformée de Fourier $\hat{H}(u)$ est égale à: 
+\begin{align}
+\hat{H}(u) &= \hat{K}(u)\times  (\hat{h}\ast \widehat{\comb})(u) \nn \\
+&= \hat{K}(u)\times  (\delta(v-\nu)\ast \comb(v))(u) \nn \\
+&=   \sum_{j=-\infty}^\infty \hat{K}(u)\ \delta(u-(\nu+j))
+\end{align}
+En utilisant la TF inverse, il vient alors\footnote{Rq. $\hat{K}(\nu+j)$ est bien la fonction $\hat{K}(u)$ évaluée au point $\nu+j$.}
+\begin{align}
+H(x) &=  \sum_{j=-\infty}^\infty \int  \hat{K}(u)\ \delta(u-(\nu+j))\ e^{2\pi i xu}du = \sum_{j=-\infty}^\infty \hat{K}(\nu+j)\ e^{2\pi i (\nu+j)x} \nn \\
+&= h(x) \sum_{j=-\infty}^\infty \hat{K}(\nu+j)\  e^{2\pi i jx}
+\end{align}
+C'est bien ce que l'on voulait démontrer. Notons au passage que si $\nu\in [-1/2,1/2]$, on vérifie que $K(x)=\sinc(x)$ est bien l'interpolateur idéal car $\hat{K}(\nu+j)=\boxcar(\nu+j)$ est non nul que ssi $j=0$, ce qui donne $H(x)=h(x)$. En quelque sorte la somme ci-dessus, est une estimation de l'erreur que l'on effectue si on utilise un interpolateur imparfait, d'où la définition de $E(\nu,x)$. Refermons la parenthèse.
+
+Revenons à l'équation \ref{eq:Su1}, si l'on pose $\nu=n/N$ et $x=-Nu$ alors $h(x)=e^{2\pi i \nu x}=\hat{f_d}(u)$, ainsi fonction d'erreur  $E(\nu,x)$, est égale à 
+\begin{align}
+E &= \sum_{j=-\infty}^\infty e^{-2\pi i j (-uN)} \widehat{K_u}(n/N-j) \nn\\
+&=\widehat{K_u}(n/N)  + \sum_{j\neq 0} \widehat{K_u}(j+n/N) e^{-2\pi i j N u}
+\end{align}
+or si la contrainte Eq.~\ref{eq:hatKclosure} est satisfaite par le noyau $K_u$, alors
+\begin{equation}
+\hat{s}(u)= (1-\underbrace{\sum_{j\neq 0} \widehat{K_u}(j+n/N)}_{E_0(n/N)})\hat{f_d}(u) + \sum_{j\neq 0} \widehat{K_u}(j+n/N) e^{-2\pi i j N u} \hat{f_d}(u)
+\end{equation}  
+
+En retournant dans l'espace réel par TF inverse, en se rappelant que $f_d(x)=a_n\delta(x-n)$, on obtient alors
+\begin{equation}
+s(x) = (1-E_0(n/N))\times a_n\delta(x-n) + \sum_{j\neq 0} \widehat{K_u}(j+n/N)\times a_n \delta(x-n-jN)
+\label{eq:ghosts}
+\end{equation} 
+C'est-à-dire qu'au lieu d'avoir $s(x)=a_n\delta(x-n)$, on a
+\begin{itemize}
+\itemb primo un facteur $1-E_0(n/N)$ qui affecte l'échantillon au point $x=n$, et
+\itemb pour chaque point $x=n+jN$ $j\neq 0$, on a une version "fantôme" (\textit{ghost}) de l'échantillon original multiplié par un facteur $\widehat{K_u}(j+n/N)$.
+\end{itemize} 
+\hfill\\
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{fig2.pdf}
+\caption{Effet d'utiliser un noyau $K_u$ en lieu et place de l'interpolant idéal, sinus cardinal, ou  sinus cardinal périodique.}
+\label{fig-Ku-effet}
+\end{figure}
+Ceci est illustré sur le schéma de la figure \ref{fig-Ku-effet}. Il nous faut donc contrôler ces deux termes. Souvenons-nous que $K_u$ est sensé remplacer $\D_N$ dans l'expression \ref{eq:hatfdfini} sur une plage $u \in [-1/2,1/2]$ ($u$ et la version continu de $u_k=k/N$) et donc $\widehat{K_u}(j+n/N)$ décroit au fur et à mesure que $|j|$ croit. \textbf{Donc les conditions principales concernent les termes  $1-E_0(u)$ et $\widehat{K_u}(u+1)$.}
+
+Nous avons donc deux types de noyau interpolateur en jeu: 
+\begin{enumerate}
+\item $K_x$ dans l'espace réel (Eq.~\ref{eq:Freal}) qui interpole entre les échantillons $\{i,a_i\}$ ($i\in \Iintv{-N/2,N/2-1}$) pour donner $F(x)$, soit une approximation continue de la fonction $f$ échantillonnée. Si $f$ appartient à une classe de fonctions, type polynôme de degré $d$, on peut trouver $K_x$ qui interpole parfaitement.
+\item $K_u$ dans l'espace de Fourier qui remplace le sinus cardinal périodique $\D_N$ (Eq.~\ref{eq:hatfdfini}), qui interpole entre les échantillons $\{k/N, \tilde{a}_k\}$ pour $k\in\Iintv{-N/2,N/2-1}$. Ce remplacement expose à l'apparition de défauts mentionnés ci-dessus.
+\end{enumerate}
+
+Avant d'envisager des exemples d'interpolateurs/noyaux, voyons un point qui est nécessaire par exemple pour la famille d'interpolateurs de Lanczos.
+%
+\section{Propriétés requises des noyaux dans l'espace réel et fond continu}
+\label{sec:kernel-freq0}
+%
+On suppose que le kernel $K_x$ est paire\footnote{Il n'y a pas de raison ici à privilégier des échantillons antérieurs ou postérieurs à un indice $j$.} donc $K_x(-x)=K_x(x)$ ce qui implique que $\hat{K_x}(-u) = \hat{K_x}(-u)$, de plus $K_x(0)=1$ pour assurer $F(j)=f(j)=a_j$, et $K_x(j)=0$ pour $j\neq 0$. Notez également 
+\begin{equation}
+\forall u, \quad \sum_{j=-\infty}^{\infty} \hat{K_x}(u+j) = 1
+\end{equation} 
+Cependant, ce n'est pas tout comme l'indique \cite{2014PASP..126..287B}, car au regard du lemme \ref{lem:interpSinusoide}, pour $\nu=0$ alors
+\begin{align}
+E(0,x) &= \sum_j \hat{K_x}(j) e^{2\pi i j x}
+= \hat{K_x}(0) + 2\sum_{j>0}\hat{K_x}(j) \cos(2\pi j x) \nn\\
+&= 1+2\sum_{j>0}\hat{K_x}(j)(\cos(2\pi j x)-1)
+\end{align}
+Par exemple si le terme $\hat{K_x}(1)$ domine alors
+\begin{align}
+E(0,x) &\approx 1 + 2 \hat{K_x}(1)(\cos(2\pi  x)-1) & 
+E^{-1}(0,x) &\approx 1 - 2 \hat{K_x}(1)(\cos(2\pi  x)-1)
+\end{align}
+On peut opérer alors un changement d'échelle
+\begin{align}
+\tilde{K}_x(x) &= K_x(x) E^{-1}(0,x) \approx  K_x(x)( 1 - 2 \hat{K_x}(1)(\cos(2\pi  x)-1)) \nn\\
+\widehat{\tilde{K}_x}(u) &\approx (1+2\hat{K_x}(1)) \hat{K_x}(u) - \hat{K_x}(1)(\hat{K_x}(u-1)+\hat{K_x}(u+1))
+\label{eq:kernel-rescaling}
+\end{align}
+Notons que $E(0,j)=1$ ($j\in\mathbb{Z}$), donc $\tilde{K}_x(0)=1$ et $\tilde{K}_x(j)=0$ pour $j\neq 0$. On peut également vérifier que $\sum_j \widehat{\tilde{K}_x}(u+j)\approx \sum_j \hat{K_x}(u+j)=1$ par compensation entre les termes. Si de plus, on note formellement une hiérarchie des termes en fonction de puissance d'un paramètre $\varepsilon$ telle que $\hat{K_x}(j)=\varepsilon^j$, alors $\widehat{\tilde{K}_x}(0)= 1+O(\varepsilon^2)$ et $\widehat{\tilde{K}_x}(1)=O(\varepsilon^2)$. 
+
+Ce qui précède a un lien avec la fonction de partition de l'unité d'un noyau.
+\begin{propriete}\label{prop:unite}
+Soit $K$ un noyau, on dit  qu'il partitionne l'unité si
+\begin{equation}
+\forall x,\ U(x)\equiv \sum_{j\in\mathbb{Z}} K(x-j) = 1 
+\end{equation} 
+ce qui a pour conséquence (et vice-versa)
+\begin{equation}
+\forall u,\ \hat{K}(u) \comb(u)=\delta(u)
+\end{equation}
+Cette formulation dans l'espace de Fourier donne $\hat{K}(0)=1$ et $\hat{K}(j)=0$ pour tout entier non nul.
+\end{propriete} 
+On note alors qu'un noyau auquel on procède à la renormalisation par $E(0,x)$ satisfait d'autant mieux cette propriété.
+ 
+
+Maintenant,  $\widehat{\tilde{K}_x}(u)$ mélange des composantes des  bandes latérales à celles de la bande principale $[-1/2,1/2]$. Plus le coefficient $\hat{K_x}(1)$ est faible plus le mélange est faible. Nous verrons en quoi cela concerne la famille de noyaux de Lanczos et n'affecte pas les autres familles que nous envisageons dans la section suivante.
+%
+\section{Noyaux pour remplacer le sinus cardinal}
+%
+Dans cette section, je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons déjà nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Par exemple, je ne considère pas les noyaux non séparables comme celui développé par les auteurs de l'article \citep{Shi2006ImageIB}. On peut également avoir un oeil sur la revue \cite{Parsania2016}. Je vais plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} 2011ASPC..442..435B et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris également ceux développés par John P. Costella  \citep{Costella2021}.
+%
+\subsection{Noyaux de C. Lanczos}
+%
+Commençons par la famille des interpolateurs de Cornelius Lanczos (1906-74) \footnote{Son nom a différentes écritures, je prends celle d'un de ces articles. C'est mathématicien et physicien d'origine hongroise qui a fait des contributions dans ces deux domaines. Il est remarquable que sous la direction de Lipót Fejér, il écrit sa thèse en 1921 "\textit{The functional theoretical relationships of the homogeneous Maxwell equations}" dédiée à Albert Einstein and Max Planck: “\textit{Dedicated to Albert Einstein and Max Planck, the two great standard-bearers of constructive speculation}" \citep{lanczos2004relations}.}utilisés par exemple dans les logiciels: \textsf{SWarp} de la suite \textsf{TERAPIX} \citep{2002ASPC..281..228B}, \textsf{PSFEx} de la suite \textsf{SExtractor} \citep{1996A&AS..117..393B, 2011ASPC..442..435B} et son extension récente \textsf{SourceXtractor++} \citep{2022arXiv221202428K}.
+
+L'idée de C. Lanczos était de régulariser les séries partielles de Fourier qui sont sujettes au phénomène de Gibbs. C'est une famille de noyaux définis par\footnote{Nb. Il y a des erreurs dans l'appendice de l'article \cite{2014PASP..126..287B} qui ont été corrigés dans le code de \textsf{GalSim}.}  
+\begin{align}
+L_m(x) &= \sinc(x)\sinc(x/m) \boxcar(x/2m) \nn\\
+\hat{L}_m(u) &= \frac{1}{2\pi}\Big(
+(2mu+m+1)\Si(\pi (2mu+m+1) )- (2mu+m-1)\Si(\pi(2mu+m-1)) \Big. \nn \\
+&+\Big. (2mu-m-1)\Si(\pi (2mu-m-1)) - (2mu-m+1)\Si(\pi (2mu-m+1))\Big)
+\end{align}
+avec  la fonction impaire $\Si(x)$, \textit{sinus intégral}, définie par
+\begin{equation}
+\Si(x) = \int_0^x \frac{\sin(t)}{t}\ dt
+\end{equation}
+et $m$ un entier positif typiquement $m\geq3$. Le support du noyau est borné par la contrainte $|x|<m$ ce qui facilite la convolution pour obtenir l'interpolation comme recherché. La figure \ref{fig-Lanczos-kernel} donne quelques exemples d'évolution des graphes de noyaux dans l'espace réel et dans celui de Fourier.
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{fig5.png}
+\caption{Exemple de noyaux de Lanczos: dans l'espace réel (haut), dans l'espace de Fourier (milieu) avec un zoom aux environs de $u=1$ (bas). Les "dB" sont définis comme l'application de la fonction $10\log_{10}(|v|)$.}
+\label{fig-Lanczos-kernel}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{fig3.png}
+\caption{Valeurs de $\hat{L}_m(j)$ pour des entiers $j>0$ et $m=3,4,5$.}
+\label{fig-Lanczos-hat-j}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{fig4.png}
+\caption{Effet de la procédure de re-normalisation du noyau de Lanczos.}
+\label{fig-Lanczos-renorm-closure}
+\end{figure}
+
+On vérifie facilement que $L_m(0)=1$ et $L_m(i)=0$ pour tout entier non nul. On vérifie également numériquement (à la précision machine) aidé d'un logiciel de calcul formel que ($u\in[-1/2,1/2]$)
+\begin{equation}
+\lim_{n\rightarrow \infty} \sum_{j=-n}^n \hat{L}_m(u+j)=1
+\end{equation}
+Cependant $\hat{L}_m(0)\neq 1$ comme par exemple les valeurs pour $m=3,4,5,6$ donnent $0.99705$, $1.00125$, $0.99935$, $1.00037$. Au passage, cela signifie que 
+\begin{equation}
+\int_{-\infty}^\infty L_m(x)\ dx \neq 1
+\end{equation}
+De même, on peut constater que $\hat{L}_m(j\neq0)\neq 0$ sur la figure \ref{fig-Lanczos-hat-j}. Ce qui a pour conséquence que le noyau de Lanczos ne partitionne pas l'unité. Il nous faut procéder à un ajustement décrit dans la section \ref{sec:kernel-freq0}. Comme $\hat{L}_m(1)\gg \hat{L}_m(j>1)$ la correction d'ordre 1 ses formules \ref{eq:kernel-rescaling} suffit à ce stade. L'effet est bien visible sur la figure \ref{fig-Lanczos-renorm-closure}. La déviation maximale de la fonction $U(x)$ (Prop.~\ref{prop:unite})  par rapport à 1, une fois le noyau normalisé est par exemple respectivement de $2\ 10^{-4}$ et $4\ 10^{-5}$ pour $m=3,5$. J'utilise par la suite cette forme renormalisée des noyaux de Lanczos. 
+
+Finalement, un polynôme échantillonné ne peut être interpolé exactement par un noyau de Lanczos (même renormalisé), il n'a pas été construit dans ce but. Dans la suite, nous allons étudier des noyaux  qui ont cette propriété.
+%
+\subsection{Noyaux polynomiaux par morceaux}
+%
+Dans cette section, je vais m'intéresser à une classe large de noyaux à support fini constitués de polynômes par morceaux. Les conditions de continuité aux points de $\mathbb{Z}$ constituent des familles de noyaux. 
+%
+\subsubsection{Famille de noyaux "MZV"}
+%
+Je commence par les noyaux d'écrits dans l'article \cite{Meijering1999}. Ils sont définis de la sorte:
+\begin{enumerate}
+\item Soit un entier $m>0$, les valeurs du noyau dans l'espace réel sont données par
+\begin{equation}
+K(x) =\begin{cases}
+\sum_{j=0}^n a_{ji} |x|^{j} & i\leq |x| < i+1 \\
+0 & |x|\geq m
+\end{cases}
+\end{equation}
+avec  $i\in \Iintv{0,m-1}$. Le degré des polynômes est $n$ sur chaque intervalle $[i,i+1]$.
+\item les contraintes imposées sont les suivantes\footnote{$\delta^K_{ij}$ est le symbole de Kronecker valant $1$ si $i=j$, et $0$ sinon.}: d'une part
+\begin{align}
+&K(j) = \delta^K_{j0},\ \forall j\in \Iintv{0,m-1} \label{eq:Constraints_1}\\
+&\lim_{x\rightarrow j^{-}}K^{(\ell)}(x) = \lim_{x\rightarrow j^{+}}K^{(\ell)}(x), \forall j\in \Iintv{0,m} \ \mathrm{et}\ \forall \ell \in  \Iintv{0,L} \label{eq:Constraints_2}
+\end{align} 
+où $K^{(\ell)}(x)$ est la dérivée d'ordre $\ell$ au point $x$. La première ligne nous est familière, tandis que la seconde concerne la continuité du noyau et de ses dérivées aux points de jointures.
+\end{enumerate}
+Pour déterminer les $N_{coef}=m(n+1)$ coefficients $\{a_{ji}\}$ il nous faut suffisamment d'équations. La première série de contraintes (Eqs.~\ref{eq:Constraints_1}), nous fixe $m$ équations.  En principe, la seconde série (Eqs.~\ref{eq:Constraints_2}) nous fixerait $(m+1)(L+1)$ équations. Mais de la  continuité en $0$, il est simple de se rendre compte  pour $\ell \in  \Iintv{0,L}$ que $a_{\ell 0}=0$ pour $\ell$ impair, par contre $a_{\ell 0}$ est indéterminé pour $\ell$ pair, il faut donc retirer ces derniers cas du décompte des équations contraignantes. Ainsi, le nombre effectif d'équations est 
+\begin{equation}
+N_{eq} = m +  (m+1)(L+1) - \ceil{(L+1)/2}
+\end{equation}
+Faisons un petit test pour se convaincre des choix pris par la suite:
+\begin{itemize}
+\itemb $n=2m+1$: on peut résoudre les systèmes parfaitement en requérant $L=n-2$.
+\itemb $n=2m$: les systèmes peuvent être résolus avec 1 degré de liberté, si $L=n-2$. Pour de plus grandes valeurs de $L$ les systèmes sont sur-contraints.
+\itemb $n=2m-1$: pour $m=1$ le système est résoluble parfaitement ($L=0$), tandis que si $m>1$, alors $L=n-2$ les systèmes peuvent être résolus avec 1 degré de liberté, au-delà comme précédemment les systèmes sont sur-contraints.
+\itemb $n=2m-2$: soit $L=n-2$ et les systèmes sont résolubles avec 2 degrés de libertés, soit les systèmes sont sur-contraints. 
+\end{itemize}
+On se rend compte que si l'on fixe la taille du support du noyau ($m$ fixé) alors $n=2m-1$ est la plus petite valeur de $n$ qui permet au mieux de trouver un noyau avec des polynômes dont les coefficients sont connus au plus à 1 coefficient prés, qu'il faut contraindre d'une autre façon que celles déjà examinées. 
+
+Par la suite, pour $m$ fixé, on prend donc $n=2m-1$ et $L=0$ si $m-1$ et il n'y a pas de degré de liberté, sinon $L=n-2$ et il y a 1 degré de liberté. Le noyau est de classe $C^L$ ($C^0$ étant la continuité simple).   
+
+Ainsi, on peut donner l'expression des différents noyaux\footnote{Un script Mathematica permet de trouver les solutions exposés pour n'importe quelle valeur de $m$ (voir Sec.~\ref{sec:MathMZV}).} pour $m=1,2,3$ soit $n=1,3,5$ (noyau linéaire, cubique, et quintique). Les noyaux sont indexés selon le degré $n$ des polynômes.
+\begin{itemize}
+\item[$\bullet$ \textbf{noyau linéaire}:] ($m=n=1$, $L=0$):
+\begin{equation}
+K_1(x) = \begin{cases}
+1-|x| & |x|< 1 \\
+0 & |x| \geq 1
+\end{cases}
+\label{eq:interp-lineaire}
+\end{equation}
+En fait c'est la convolution de 2 $\boxcar$: $K_1(x) = (\boxcar \ast \boxcar)(x)$. Sa transformée de Fourier s'écrit donc
+\begin{equation}
+\hat{K_1}(u) = \sinc^2(u)
+\end{equation}
+\item[$\bullet$ \textbf{noyau cubique}:]  ($m=2$, $n=3$, $L=1$) posons $a_{31}=c$:
+\begin{equation}
+K_3(x) = \begin{cases}
+1 -(c+3)|x|^2+(2+c)|x|^3 & |x|< 1 \\
+-4c + 8x |x|-5c |x|^2+ c |x|^3 & 1\leq |x|<2 \\
+0 & |x| \geq 2
+\end{cases}
+\end{equation}
+\item[$\bullet$ \textbf{noyau quintique}:] ($m=3$, $n=5$, $L=3$)  posons $a_{51}=c$:
+\begin{equation}
+K_5(x) = \begin{cases}
+1 +\left(-\frac{5}{2}+8c\right) |x|^2+\left(\frac{45}{16}-18c\right)|x|^4
++ \left(-\frac{21}{16}+10c\right)|x|^5 & |x|< 1 \\
+5-66c + 5(-3+53c)|x|+\left(\frac{35}{2}-392c\right)|x|^2 &\\
++(-10+270c)|x|^3+\left(\frac{45}{16}-88c\right)|x|^4+ \left(-\frac{5}{16}+11c\right)|x|^5 & 1\leq |x|<2 \\
+-162c + 297 c |x|-216 c|x|^2 + 78 c |x|^3-14 c |x|^4 + c |x|^5 & 2\leq |x|<3\\
+0 & |x|\geq 3
+\end{cases}
+\end{equation}
+\end{itemize}
+Les expressions générales de $K_n(x)$ et de $\hat{K_n}(u)$ sont telles que $K_n(j)=\hat{K_n}(j)=\delta^K_{0j}$ pour $j\in\mathbb{Z}$. De même, on vérifie que $K_n(x)$ et $\hat{K_n}(u)$ sont des partitions de l'unité.
+
+Maintenant, la question de déterminer $c$ se pose. \cite{Meijering1999} sachant que  $\hat{K_n}^{(1)}(0) = 0$ par symétrie, propose de fixer $\hat{K_n}^{(2)}(0) = 0$. Cela permet de fixer les valeurs: $c=-1/2$ et $c=3/64$ pour $n=3$ et $n=5$. Ainsi, on particularise les expressions données ci-dessus, et on les note $K^{mzv}_n$ (idem pour les TF). Concernant le noyau cubique
+\begin{equation}
+K^{mzv}_3(x) = \begin{cases}
+1 +\frac{1}{2}x^2(3|x|-5) & |x|< 1 \\
+-\frac{1}{2}(|x|-1)(|x|-2)^2& 1\leq |x|<2 \\
+0 & |x| \geq 2
+\end{cases}
+\end{equation}
+et
+\begin{equation}
+\widehat{K^{mzv}_3}(u) = \sinc(u)^3 (-2 \cos(\pi u) + 3 \sinc(\pi u))
+\end{equation}
+ Concernant le noyau quintique
+\begin{equation}
+K^{mzv}_5(x) = \begin{cases}
+1 + x^2\left(-\frac{17}{8}+\frac{x^2}{32}\left(63- 27|x|\right) \right) & |x|< 1 \\
+\frac{1}{64}(|x|-1)(|x|-2)(61+|x|(9+|x|(-45+13|x|)))& 1\leq |x|<2 \\
+\frac{1}{64}(|x|-2)(|x|-3)^4 & 2\leq |x|<3 \\
+0 & |x| \geq 3
+\end{cases}
+\end{equation}
+et
+\begin{align}
+\widehat{K^{mzv}_5}(u) &=\frac{3}{8} \sinc(u)^3 \Big(35 (\sinc(u) - 
+       \cos(\pi u) )/ (\pi^2 u^2) + 
+   \sinc(u)^2 (6 \cos(\pi u) - 15 \sinc(u))\Big)
+\end{align}
+Si $K^{mzv}_3(x)$ est la forme  de noyau cubique utilisé par les auteurs de l'article \cite{2014PASP..126..287B} et le code \textsf{GalSim} il est reconnu comme le \textit{Catmull-Rom cubic interpolation kernel} dans la littérature. 
+
+Ceci dit le choix des valeurs de $c$ proposées par \cite{Meijering1999} pourrait être revu à la lumière de la section \ref{sec:DNapprox} à propos de l'apparition des images fantômes (Eq.~\ref{eq:ghosts}). On pourrait tenter au-delà du fait que $\widehat{K^{mzv}_n}(1)=0$ de contrôler les termes $O(u-1)$. En fait, concernant les noyaux cubique et quintique satisfont:
+\begin{align}
+\widehat{K^{mzv}_3}(u) &= -3\frac{1+2c}{\pi^2} (u-1) + \frac{12}{\pi^2}(1+2c)(u-1)^2 + O((u-1)^3) \nn\\
+\widehat{K^{mzv}_5}(u) &= \frac{45}{8\pi^4}(-3+64c) (u-1) -\frac{135}{4\pi^4}(-3+64c) (u-1)^2 + O((u-1)^3)
+\end{align}
+Ainsi, les choix $c=(-1/2,3/64)$ permettent non seulement de contrôler les $\widehat{K^{mzv}_n}=1+O(u^4)$ mais aussi $\widehat{K^{mzv}_n}=1+O((u-1)^3)$. Donc nous en resterons là avec cette famille de noyaux. La figure \ref{fig-mzv-kernel} donne les graphes de cette famille de noyaux sur le même modèle que la figure \ref{fig-Lanczos-kernel}. 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{fig6.png}
+\caption{Les noyaux $K_1$, $K^{mzv}_3$ et $K^{mzv}_5$ sur le même modèle que la figure \ref{fig-Lanczos-kernel}.}
+\label{fig-mzv-kernel}
+\end{figure}
+%
+\subsubsection{Famille de noyaux "BG"}
+% 
+\cite{2014PASP..126..287B} proposent dans leur articles non pas une famille en tant que telle, car ils se focalisent sur un noyau quintique, mais on peut retrouver dans un même schéma, le noyau cubique de $K^{mzv}_3(x)$ autrement appelé le noyau de Catmull-Rom,  la version "BG" de noyau quintique ainsi qu'une variante, elle-même différente de $K^{mzv}_5(x)$.
+
+Pour cela, on utilise la même définition des noyaux MZV ainsi que les même notations, notamment le paramètre $m$ donne non seulement la taille du support du noyau, et aussi le degré des polynômes $n=2m-1$. Il y a donc $2m^2$ coefficients à déterminer. Les contraintes imposées sont les suivantes:
+\begin{itemize}
+\itemb on commence par série des contraintes identiques Eqs.~\ref{eq:Constraints_1}:
+\begin{align}
+K(j) = \delta^K_{j0},\ \forall j\in \Iintv{0,m-1} \label{eq:ConstBG_1}
+\end{align} 
+\itemb ensuite, on limite la régularité du noyau par rapport au noyau MZV dans l'espace réel par requérir
+\begin{align}
+& a_{\ell,0}=0, \quad \ell \in  \Iintv{1,m-1}\ \mathrm{et} \ \ell \ \mathrm{impair};
+\end{align}
+et pour $m\geq3$
+\begin{align}
+&\lim_{x\rightarrow j^{-}}K^{(\ell)}(x) = \lim_{x\rightarrow j^{+}}K^{(\ell)}(x), \forall j\in \Iintv{1,m} \ \mathrm{et}\ \forall \ell \in  \Iintv{0,n-4} \label{eq:ConstBG_2}
+\end{align}
+\itemb par contre dans l'espace de Fourier, nous imposons
+\begin{align}
+& \widehat{K}(0)=1 \\
+&\reallywidehat{K^{(\ell)}}(0) = 0, \forall \ell\in \Iintv{2,n} \ \mathrm{et}\ \ \ell \ \mathrm{pair} \\
+& \reallywidehat{K^{(\ell)}}(1) = 0, \forall \ell\in \Iintv{0,n-1}
+\end{align}
+\end{itemize}
+Pour $m=2$ ($n=3$), on retrouve le noyau cubique de la section précédente. Concernant $m=3$ ($n=5)$, les coefficients $\{a_{ji}\}$ sont tous déterminés sauf 1 que l'on peut choisir $a_{20}$. On peut alors avoir plusieurs choix pour déterminer cette dernière inconnue.
+
+Soit on fixe $a_{20}=0$, ce qui donne la forme de noyau quintique de l'article \cite{2014PASP..126..287B} à savoir\footnote{Nb. l'expression dans l'article n'est pas correcte puisqu'il faut assurer que $K(-x)=K(x)$, c'est-à-dire qu'il faut faire apparaître les valeurs absolues. Le code de \textsf{GalSim} utilise la bonne formulation. De plus je donne ici la TF du }
+\begin{align}
+K^{BG}_5(x) &= \begin{cases}
+1 + \frac{1}{12}|x|^3 \Big(-95+|x|(138-55|x|)\Big) & |x|< 1 \\
+\frac{1}{24}(|x|-1)(|x|-2)\Big(-138+|x|(348+|x|(-249+55|x|))\Big)& 1\leq |x|<2 \\
+-\frac{1}{24}(|x|-2)(|x|-3)^2\Big(54+|x|(-50+11|x|)\Big) & 2\leq |x|<3 \nn \\
+0 & |x| \geq 3
+\end{cases}\\
+\widehat{K^{BG}_5}(u)&=\sinc(u)^5 \Big(2(-27+(\pi u)^2)\cos(\pi u)+\sinc(u)(55-19(\pi u)^2)\Big)
+\end{align}
+Les dérivées secondes de ce noyaux sont discontinues aux points de jonction $K^{BG}_5(j)$ ($j=1,2,3$). Concernant la régularité de $\widehat{K^{BG}_5}(u)$, nous avons\footnote{Nb. attention $O(x^n)$ est bien "d'ordre de $x^n$" qui n'est pas à confondre avec $o(x^n)$ qui est l'indication de "négligeable par rapport à $x^n$).} $\widehat{K^{BG}_5}(u)=O(u^6)$ et $\widehat{K^{BG}_5}(u-j)=O((u-j)^5)$ pour ($j=1,2,3$). 
+
+C'est là, où j'ai utilisé la liberté du choix de la valeur de $a_{20}$ pour faire écho à la lumière de l'équation \ref{eq:ghosts} de la section \ref{sec:DNapprox} afin de diminuer l'influence des images fantômes. On peut choisir $a_{20}$ de telle façon que $\widehat{K_5}(1)=O((u-1)^6)$ ce qui donne
+\begin{equation}
+a_{20} = -\frac{5}{4}\left(\frac{27-\pi^2}{15-\pi^2}\right)
+\end{equation}
+Ainsi
+\begin{align}
+K^{JE}_5(x) &= \begin{cases}
+\frac{1}{12} \Big((138-55 |x|) |x|-95\Big) |x|^3+\frac{5 \left(\pi ^2-27\right)}{4 \left(\pi^2-15\right)} (|x|-1)^2 (2 |x|-1) x^2 +1& |x|< 1 \\
+\frac{1}{24 \left(\pi^2-15\right)}(|x|-2) (|x|-1) \Big(\pi ^2 (|x| (|x| (25 |x|-114)+153)-48)\Big.& \nn\\
+\qquad\qquad \Big.-15 (|x| ((|x|-6) |x|-3)+24)\Big)& 1\leq |x|<2 \nn\\
+-\frac{1}{24 \left(\pi ^2-15\right)}(|x|-3)^2 (|x|-2) \Big(\pi^2 (|x|-3) (5 |x|-8)-3 (|x|-7) |x|\Big) & 2\leq |x|<3 \nn \\
+0 & |x| \geq 3
+\end{cases}\\
+\widehat{K^{JE}_5}(u)&= \frac{\sinc(\pi u)^5}{\pi^2-15} \left(24 \pi^2 (u^2-1) \cos (\pi u)-(\pi^2 ((39+7 \pi^2) u^2-25)+15) \sinc(\pi  u)\right)
+\end{align}
+$K^{JE}_5(j)$ a toutes les dérivées secondes discontinues en $j=0,\dots,3$, tandis qu'en même temps  $\widehat{K^{JE}_5}(u-j)=O((u-j)^6)$ (cf. pas uniquement en $j=0,1$).
+
+On vérifie aussi que pour toutes les valeurs de $a_{20}$ à la fois $K_5)$ et $\widehat{K_5}$ sont des partitions de l'unité.
+%
+\subsubsection{Famille de noyaux : B-spline (cardinale)}
+%
+Les \textit{splines} sont un outil très utilisé (math/ingénierie) que je ne peux le couvrir l'ensemble des applications. Concernant l'interpolation, on les présente souvent dans l'espace réel, afin de concevoir une représentation par exemple cubique par morceaux, entres les noeuds dont on connait la position dans un espace multi-dimensionnel. Concernant la possibilité d'obtenir une base orthogonale, on exploite ce que l'on nomme soit les \textit{box splines} \cite{10.5555/1525499}, soit les \textit{B-splines} et les versions "cardinal" \cite{Unser1993a} que nous allons manipuler.  \cite{Costella2021} présente d'une manière illustrée l'obtention des \textit{cardinal B-splines}.  Dans la suite, je vais me concentrer sur un cas particulier pour comparaison avec les sections précédentes. 
+
+En fait l'idée est la suivante. Dans le domaine de Fourier, l'expression du noyau d'une B-spline est la suivante\footnote{Nb. il peut y avoir différentes formulations non seulement via les conventions de la transformée de Fourier, mais aussi si on considère des B-splines centrées ou non.}
+\begin{equation}
+\hat{\beta}_m(u) = \sinc(u)^{m+1}
+\end{equation}
+ce qui dans l'espace réel donne $m$ convolutions de la fonction $\boxcar(x)$:
+\begin{equation}
+\beta_m(x) = (\underbrace{\boxcar \ast \dots \ast \boxcar}_{(m+1)\mathrm{-fois}})(x)
+\end{equation}
+Un exemple est donné sur la figure \ref{fig-Bspline3-kernel} pour le $m=3$ que nous allons détaillé. L'expression dans l'espace réel peut se mettre sous la forme de polynôme d'ordre $m$ par morceaux qui pour $\beta_3$ donne une formulation "cubique":
+\begin{equation}
+\beta_3(x) = \begin{cases}
+\frac{2}{3}+\frac{1}{2} x^2(|x|-2) & |x|< 1 \\
+-\frac{1}{6} (|x|-2)^3 & 1\leq |x|<2 \\
+0 & |x| \geq 2
+\end{cases}
+\end{equation}
+Si $\beta_3(x)$ est une partition de l'unité (en particulier $\sum_{j=-1}^1 \beta_3(j)=1$), par contre $\beta_3(0)\neq 1$  et $\beta_3(1)\neq 0$. De même, si $\hat{\beta}_3(0)=1$ et $\hat{\beta}_3(1)=0$ par contre  $\hat{\beta}(u)$ n'est pas une partition de l'unité (voir Fig.~\ref{fig-UnityBspline3}).
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{fig7.png}
+\caption{Graphes de la B-spline $\beta_3$ et de sa version "cardinal" $\gamma_3$ comparés à celui du sinus cardinal.}
+\label{fig-Bspline3-kernel}
+\end{figure}
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{fig8a.png}
+\includegraphics[width=0.4\textwidth]{fig8b.png}
+\caption{La B-spline $\beta_3$ partitionne l'unité dans l'espace réel, ce n'est pas le cas de $\hat{\beta}_3$ dans l'espace de Fourier.}
+\label{fig-UnityBspline3}
+\end{figure}
+%
+
+Remarquons que l'interpolation linéaire ($\beta_1$) (Eq.~\ref{eq:interp-lineaire}) est la convolution de deux $\boxcar$ et qu'il n'a pas les défauts mis en évidence ci-dessus de $\beta_3$. En fait, comme le dit  \cite{Costella2021}, le noyau linéaire a été "flouté" (\textit{blur kernel}). C'est ce qu'il faut corriger, et c'est le sujet des \textit{cardinal B-splines}.
+
+Le noyau de floutage qui affecte $\beta_3$ est 
+\begin{equation}
+b_3(x) = \sum_{j=-1}^1 \beta_3(j)\delta(x-j)
+\end{equation}
+avec $\beta_3(j)=\{1/6,2/3,1/6\}$ pour respectivement $j=\{-1,0,1\}$. La transformée de Fourier inverse fournit la représentant suivante 
+\begin{equation}
+\hat{b}_3(u)= \frac{2}{3} + 2\frac{1}{6}\cos(2\pi u) = 1-\frac{2}{3}\sin(\pi u)^2
+\end{equation}
+La première forme est généralisable (voir Eq. 3.22 de \cite{Unser1993a}) et il n'est pas fortuit de trouver les coefficients $\beta_3(0)$ et $\beta_(1)$. La seconde forme permet un usage pratique à suivre. Donc, si l'on veut déconvoluer le "flou", il suffit alors de définir 
+\begin{equation}
+\hat{\gamma}_3(u) = \hat{\beta}_3(u)\times \hat{b}^{-1}_3(u) = \frac{\sinc^4(u)}{1-\frac{2}{3}\sin(\pi u)^2}
+\label{eq:hatgam3}
+\end{equation}  
+où $\hat{b}^{-1}_3(u)$ est en termes de traitement du signal \textit{la réponse impulsionnelle du filtre B-spline}.
+
+L'inversion dans le cas $m=3$ se fait en utilisant la relation du binôme de $(1-x)^{-1}$ qui fait apparaitre les facteurs  $\sin(\pi u)^{2n}$ qui se décompose\footnote{\url{https://en.wikipedia.org/wiki/List_of_trigonometric_identities}} selon
+\begin{equation}
+\sin(\pi u)^{2n} = \frac{1}{2^{2n}}\binom{2n}{n}+\frac{(-1)^n}{2^{2n-1}}\sum_{k=0}^{n-1} (-1)^k \binom{2n}{k}\cos(2(n-k)\pi u)
+\end{equation}
+Puis, en utilisant le fait que 
+\begin{equation}
+\cos(2(n-k)\pi u) \xrightarrow[]{TF^{-1}} \frac{1}{2}(\delta(x-(n-k))+\delta(x+(n-k)))
+\end{equation}
+on peut alors mettre $b^{-1}_3(x)$ sous la forme
+\begin{equation}
+b^{-1}_3(x) = \sum_{n=-\infty}^\infty s_3(n) \delta(x-n)
+\end{equation}
+avec\footnote{nb. Mathematica aide bien pour trouver la forme compacte.}
+\begin{equation}
+s_3(n) = (-1)^n \sum_{k=0}^\infty \frac{1}{6^{|n|+k}} \binom{2(|n|+k)}{k} =  \frac{(-1)^n\sqrt{3}}{(2+\sqrt{3})^{|n|}}
+\end{equation}
+Remarquons que la propriété:
+\begin{equation}
+\sum_{n=-\infty}^\infty s_3(n) = 1
+\end{equation} 
+Finalement, l'expression de $\gamma_3(x)$  est donnée par convolution
+\begin{equation}
+\gamma_3(x) = (\beta_3 \ast b^{-1}_3)(x) =  \sum_{n=-\infty}^\infty s_3(n) \beta_3(x-n)
+\label{eq:gam3}
+\end{equation}
+La parité de $\gamma_3$ et la même que celle de $\beta_3$. Notons qu'étant donné que $\beta_3(j)\neq 0$ pour $j=-1,0,1$ et $\beta_3(x)$ est paire ainsi que $s_3(n)$ nous avons
+\begin{align}
+\gamma_3(0) &=\sum_{n=-\infty}^\infty s_3(n) \beta_3(n)
+= \left\{-\frac{\sqrt{3}}{2+\sqrt{3}},\sqrt{3},-\frac{\sqrt{3}}{2+\sqrt{3}}\right\}/\left\{\frac{1}{6},\frac{2}{3},\frac{1}{6}\right\} = 1
+\end{align}
+De plus si l'on note $s_3(n)=(-1)^n\sqrt{3}a^{|n|}$ avec $a=(2+\sqrt{3})^{-1}=2-\sqrt{3}$, alors pour $j\geq 1$ nous avons
+\begin{align}
+\gamma_3(j) &= s_3(j)\beta_3(0) + \beta_3(1)[s_3(j-1)+s_3(j+1)]\nn \\
+&= \sqrt{3} (-1)^j a^j (\beta_3(0)-\beta_3(1)(1/a+a)) = 0
+\end{align}
+(et par symétrie $\gamma_3(-j)=0$).  
+
+Les graphes de $\gamma_3(x)$ et $\hat{\gamma}_3(u)$ comparés à ceux de $\beta_3(x)$ et $\hat{\beta}_3(u)$ sont montrés sur la figure \ref{fig-Bspline3-kernel}. Maintenant, la figure \ref{fig-UnityBsplineCard3} apporte la touche finale en montrant que la B-Spline cardiale partitionne bien l'unité à la fois dans l'espace réel mais aussi dans l'espace de Fourier. Ces propriétés sont aisément démontrable en utilisant concernant l'espace réel, le fait que $\beta_3(x)$ partitionne l'unité  et que la somme des $s_3(n)$ donne l'unité, et concernant l'espace de Fourier remarquons que $\hat{\gamma}_3(u)$ a été conçue pour réaliser cette propriété de partitionnement. 
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{fig9a.png}
+\includegraphics[width=0.4\textwidth]{fig9b.png}
+\caption{La B-spline \textit{cardinal} $\gamma_3$ partitionne l'unité dans l'espace réel, et il en est de même dans l'espace de Fourier pour $\hat{\gamma}_3$ ce qui contraste avec le figure \ref{fig-UnityBspline3}.}
+\label{fig-UnityBsplineCard3}
+\end{figure}
+
+
+%
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=0.4\textwidth]{fig-WL1-img-non-transformed.png}
+%\includegraphics[width=0.45\textwidth]{fig-WL1-pixelval-non-trans.png}
+%\caption{Exemple d'une image du lot WL-1 (gauche) et la distribution afférente des valeurs de pixels (droite).}
+%\label{fig-WL1-non-trans}
+%\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.45\textwidth]{fig-WL1-pixelval-trans.png}
+%\caption{Distribution des valeurs de pixels de la figure \ref{fig-WL1-non-trans} après application d'une transformation Cox-Box de paramètre $\lambda \approx -0.22$ et d'une standardisation classique.}
+%\label{fig-WL1-trans}
+%\end{figure}
+
+%\begin{lstlisting}[language=iPython]
+%def ANSATZ_NoCondi(L,centers,sigma,shifts,shifts_sym = False):
+%    """Non conditionnal ansatz for direct estimation of energy, a scalar potential (sigmoids) + a quadratic potential
+%    
+%    Parameters:
+%    L (int): system size = L*L 
+%    centers (tensor): position of the centers of the sigmoids 
+%    sigma (tensor) : width of the sigmoids
+%    shifts (list of tuples) : spatial shifts for the quadratic potential, carefull (0,0) is already taken into account, do not add here  
+%    shifts_sym (Bool) : if True, the shifts are not symetrized
+%    """
+%\end{lstlisting}
+
+%
+\section{Résumé}
+% 
+
+%%%%%%%%%%
+%\newpage
+\addcontentsline{toc}{section}{Références}
+% Put your bibiliography file here
+%\section{Bibliography}
+\bibliographystyle{elsarticle-harv} %aa
+\bibliography{refs.bib}
+
+\newpage
+\appendix
+\section{Fourier vadémécum}
+La table \ref{tag-2020-TFconv} résume quelques propriétés de la Transformée de Fourier $\mathcal{F}$ et son inverse $\mathcal{F}^{-1}$ en dimension 1. Pour simplifier les notations, il est utilisé pour désigner la TF d'une fonction $f$, $\mathcal{F}[f] = \hat{f}$. Si la Transformée inverse a la propriété $\mathcal{F}^{-1}[\mathcal{F}[f]]= \mathcal{F}[\mathcal{F}^{-1}[f]]=f$, par contre appliquer deux fois la TF a la propriété suivante: $\hat{\hat{f}}(x) = f(-x)$.
+
+On peut également avoir besoin de:
+\begin{align}
+\mathcal{F}[\delta(x-x_0)](\omega) &= \reallywidehat{\delta(x-x_0)}(\omega) = N(a,b)\ e^{ibx_0\omega}\nn\\
+\mathcal{F}[e^{2\pi i \nu x}](\omega) &= \reallywidehat{e^{2\pi i \nu x}}(\omega) = N(a,b)\ \delta(b/(2\pi)\omega +\nu)
+\end{align}
+qui dans le cas de la convention prise dans cette note $(a=0,b=-2\pi)$, donne $N(a,b)=1$ et 
+\begin{align}
+\reallywidehat{\delta(x-x_0)}(\omega)&=  e^{-2\pi i x_0\omega} &
+\reallywidehat{e^{2\pi i \nu x}}(\omega) &=\delta(\nu - \omega) = \delta(\omega-\nu)
+\end{align}
+
+
+
+\begin{table}
+\centering
+{\renewcommand{\arraystretch}{2}
+\begin{tabular}{cr@{\ =\ }l}
+\toprule
+TF & $\displaystyle\hat{f}(\omega)$ & $\displaystyle N(a,b)\int f(x) e^{i b \omega x} dx$\\
+TF Inverse & $\displaystyle f(x)$ &$\displaystyle \frac{N(a,b)}{(2\pi)^a} \int \hat{f}(\omega) e^{-i b \omega x} dx$\\
+TF de TF & $\widehat{\displaystyle \hat{f}(x)}(\omega)$ & $(2\pi)^a f(-\omega)$ \\
+Translation & $\displaystyle\widehat{f(x-h)}(\omega)$ & $\displaystyle e^{ibw h}\hat{f}(\omega)$\\
+Scaling  & $\displaystyle\widehat{f(\frac{x}{s})}(\omega)$ & $|s|\hat{f}(s\omega)$\\
+Moyenne & $\displaystyle \hat{f}(0)$ & $\displaystyle N(a,b)\int f(x) \mathrm{d}x$\\
+Plancherel & $\displaystyle \int f(x) g^\ast(x) \mathrm{d}x$ & $\displaystyle \frac{1}{(2\pi)^a} \int \hat{f}(\omega) \hat{g}^\ast(\omega) \mathrm{d}\omega $\\
+Parseval & $\displaystyle \int |f(x)|^2 \mathrm{d}x$ & $\displaystyle \frac{1}{(2\pi)^a} \int |\hat{f}(\omega)|^2 \mathrm{d}\omega $\\
+Dérivée & $\displaystyle \widehat{f^{(p)}(x)}(\omega)$ & $\displaystyle (-i b\omega)^p \hat{f}(\omega)$\\
+Convolution & $\displaystyle \widehat{f\ast g}$ & $\displaystyle \frac{1}{N(a,b)} \hat{f}(\omega) \hat{g}(\omega)$\\
+Multiplication par une phase & $\displaystyle \widehat{e^{i\xi x}f(x)}(\omega)$ & $\displaystyle \hat{f}(\xi/b +\omega) $\\
+\bottomrule
+\end{tabular}
+}
+\caption{Exemples des propriétés de la transformation de Fourier exprimées suivant une formulation générique tirée de Mathematica en 1D, avec la normalisation $N(a,b)=(|b|/(2\pi)^{1-a})^{1/2}$.}
+\label{tag-2020-TFconv}
+\end{table} 
+%
+\newpage
+\section{Script Mathematica pour les noyaux MZV}
+\label{sec:MathMZV}
+\begin{lstlisting}[language=iPython]
+FilterP[m_] := 
+ Module[{a, n, condp, condn, cond, polyp, polyn, poly, h, L, vars, 
+   eq1, eq2, eq3, eqs, sol},
+   (* ordre du polynome *)
+  n = If[m <= 1, Return["Warning: need m>1"], 2 m - 1];
+  (* intervalles *)
+  condp[x_] := Table[i <= x < i + 1, {i, 0, m - 1}];
+  condn[x_] := Table[i < x <= i + 1, {i, -m, -1}];
+  cond[x_] := Join[condn[x], condp[x]];
+   (* polynomes par intervalles *)
+  polyp[x_] := 
+   Table[Sum[Subscript[a, j, i] x^j, {j, 0, n}], {i, 0,  m - 1}];
+  polyn[x_] := 
+   Table[Sum[Subscript[a, j, -i] (-x)^j, {j, 0, n}], {i, -m + 1, 0}];
+  poly[x_] := Join[polyn[x], polyp[x]];
+  (* le filtre par morceaux  *)
+  h[x_] := 
+   Evaluate@Piecewise[Table[{poly[x][[i]], cond[x][[i]]}, {i, 1, 2 m}], 0];
+  (* derive *)
+  h[x_, l_] := D[h[x], {x, l}];
+  L = n - 2;
+  (* aji variables *)
+  vars =  Flatten@Table[Subscript[a, j, i], {i, 0, m - 1}, {j, 0, n}];
+  (* contraintes *)
+  eq1 = h[0] == 1;
+  eq2 = Table[h[i] == 0, {i, 1, m - 1}];
+  eq3 = Table[
+    Limit[h[x, l], x -> i, Direction -> 1] == 
+    Limit[h[x, l], x -> i, Direction -> -1], {l, 0, L}, {i, 0, m}];
+  eqs = Flatten@{eq1, eq2, eq3, Subscript[a, n, m - 1] == c};
+  (* Solve *)
+  sol = FullSimplify@Solve[eqs, vars];
+  h[#] /. sol[[1]] /. #1->x
+  ]
+\end{lstlisting}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
