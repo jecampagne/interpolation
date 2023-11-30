@@ -606,7 +606,7 @@ Maintenant,  $\widehat{\tilde{K}_x}(u)$ mélange des composantes des  bandes lat
 %
 \section{Noyaux pour remplacer le sinus cardinal}
 %
-Dans cette section, je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons déjà nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Par exemple, je ne considère pas les noyaux non séparables comme celui développé par les auteurs de l'article \citep{Shi2006ImageIB}. On peut également avoir un oeil sur la revue \cite{Parsania2016}. Je vais plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} 2011ASPC..442..435B et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris également ceux développés par John P. Costella  \citep{Costella2021}.
+Dans cette section, je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons déjà nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Par exemple, je ne considère pas les noyaux non séparables comme celui développé par les auteurs de l'article \citep{Shi2006ImageIB}. On peut également avoir un oeil sur la revue \cite{Parsania2016}. Je vais plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} \citep{2011ASPC..442..435B} et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris sommairement les noyaux de type B-Spline et B-Spline cardinal, car ils sont souvent utilisés dans bien des applications.
 %
 \subsection{Noyaux de C. Lanczos}
 %
@@ -627,7 +627,7 @@ et $m$ un entier positif typiquement $m\geq3$. Le support du noyau est borné pa
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{fig5.png}
-\caption{Exemple de noyaux de Lanczos: dans l'espace réel (haut), dans l'espace de Fourier (milieu) avec un zoom aux environs de $u=1$ (bas). Les "dB" sont définis comme l'application de la fonction $10\log_{10}(|v|)$.}
+\caption{Exemple de noyaux de Lanczos (non normalisé): dans l'espace réel (haut), dans l'espace de Fourier (milieu) avec un zoom aux environs de $u=1$ (bas). Les "dB" sont définis comme l'application de la fonction $10\log_{10}(|v|)$.}
 \label{fig-Lanczos-kernel}
 \end{figure}
 \begin{figure}
@@ -642,6 +642,12 @@ et $m$ un entier positif typiquement $m\geq3$. Le support du noyau est borné pa
 \caption{Effet de la procédure de re-normalisation du noyau de Lanczos.}
 \label{fig-Lanczos-renorm-closure}
 \end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{fig5b.png}
+\caption{Mêmes graphiques que sur la figure \ref{fig-Lanczos-kernel} mais effectués avec les noyaux de Lanczos re-normalisés.}
+\label{fig-Lanczos-norm-kernel}
+\end{figure}
 
 On vérifie facilement que $L_m(0)=1$ et $L_m(i)=0$ pour tout entier non nul. On vérifie également numériquement (à la précision machine) aidé d'un logiciel de calcul formel que ($u\in[-1/2,1/2]$)
 \begin{equation}
@@ -651,7 +657,7 @@ Cependant $\hat{L}_m(0)\neq 1$ comme par exemple les valeurs pour $m=3,4,5,6$ do
 \begin{equation}
 \int_{-\infty}^\infty L_m(x)\ dx \neq 1
 \end{equation}
-De même, on peut constater que $\hat{L}_m(j\neq0)\neq 0$ sur la figure \ref{fig-Lanczos-hat-j}. Ce qui a pour conséquence que le noyau de Lanczos ne partitionne pas l'unité. Il nous faut procéder à un ajustement décrit dans la section \ref{sec:kernel-freq0}. Comme $\hat{L}_m(1)\gg \hat{L}_m(j>1)$ la correction d'ordre 1 ses formules \ref{eq:kernel-rescaling} suffit à ce stade. L'effet est bien visible sur la figure \ref{fig-Lanczos-renorm-closure}. La déviation maximale de la fonction $U(x)$ (Prop.~\ref{prop:unite})  par rapport à 1, une fois le noyau normalisé est par exemple respectivement de $2\ 10^{-4}$ et $4\ 10^{-5}$ pour $m=3,5$. J'utilise par la suite cette forme renormalisée des noyaux de Lanczos. 
+De même, on peut constater que $\hat{L}_m(j\neq0)\neq 0$ sur la figure \ref{fig-Lanczos-hat-j}. Ce qui a pour conséquence que le noyau de Lanczos ne partitionne pas l'unité. Il nous faut procéder à un ajustement décrit dans la section \ref{sec:kernel-freq0}. Comme $\hat{L}_m(1)\gg \hat{L}_m(j>1)$ la correction d'ordre 1 ses formules \ref{eq:kernel-rescaling} suffit à ce stade. L'effet est bien visible sur la figure \ref{fig-Lanczos-renorm-closure}. La déviation maximale de la fonction $U(x)$ (Prop.~\ref{prop:unite})  par rapport à 1, une fois le noyau normalisé est par exemple respectivement de $2\ 10^{-4}$ et $4\ 10^{-5}$ pour $m=3,5$. J'utilise par la suite cette forme renormalisée des noyaux de Lanczos dont les graphes sont donnés sur la figure \ref{fig-Lanczos-norm-kernel}. 
 
 Finalement, un polynôme échantillonné ne peut être interpolé exactement par un noyau de Lanczos (même renormalisé), il n'a pas été construit dans ce but. Dans la suite, nous allons étudier des noyaux  qui ont cette propriété.
 %
@@ -714,6 +720,7 @@ K_3(x) = \begin{cases}
 -4c + 8x |x|-5c |x|^2+ c |x|^3 & 1\leq |x|<2 \\
 0 & |x| \geq 2
 \end{cases}
+\label{eq:cubic-kernel}
 \end{equation}
 \item[$\bullet$ \textbf{noyau quintique}:] ($m=3$, $n=5$, $L=3$)  posons $a_{51}=c$:
 \begin{equation}
@@ -725,6 +732,7 @@ K_5(x) = \begin{cases}
 -162c + 297 c |x|-216 c|x|^2 + 78 c |x|^3-14 c |x|^4 + c |x|^5 & 2\leq |x|<3\\
 0 & |x|\geq 3
 \end{cases}
+\label{eq:quinticMZV-kernel}
 \end{equation}
 \end{itemize}
 Les expressions générales de $K_n(x)$ et de $\hat{K_n}(u)$ sont telles que $K_n(j)=\hat{K_n}(j)=\delta^K_{0j}$ pour $j\in\mathbb{Z}$. De même, on vérifie que $K_n(x)$ et $\hat{K_n}(u)$ sont des partitions de l'unité.
@@ -771,7 +779,7 @@ Ainsi, les choix $c=(-1/2,3/64)$ permettent non seulement de contrôler les $\wi
 \label{fig-mzv-kernel}
 \end{figure}
 %
-\subsubsection{Famille de noyaux "BG"}
+\subsubsection{Famille de noyaux "BG" dont une variante quintique}
 % 
 \cite{2014PASP..126..287B} proposent dans leur articles non pas une famille en tant que telle, car ils se focalisent sur un noyau quintique, mais on peut retrouver dans un même schéma, le noyau cubique de $K^{mzv}_3(x)$ autrement appelé le noyau de Catmull-Rom,  la version "BG" de noyau quintique ainsi qu'une variante, elle-même différente de $K^{mzv}_5(x)$.
 
@@ -800,15 +808,16 @@ Pour $m=2$ ($n=3$), on retrouve le noyau cubique de la section précédente. Con
 
 Soit on fixe $a_{20}=0$, ce qui donne la forme de noyau quintique de l'article \cite{2014PASP..126..287B} à savoir\footnote{Nb. l'expression dans l'article n'est pas correcte puisqu'il faut assurer que $K(-x)=K(x)$, c'est-à-dire qu'il faut faire apparaître les valeurs absolues. Le code de \textsf{GalSim} utilise la bonne formulation. De plus je donne ici la TF du }
 \begin{align}
-K^{BG}_5(x) &= \begin{cases}
+K^{bg}_5(x) &= \begin{cases}
 1 + \frac{1}{12}|x|^3 \Big(-95+|x|(138-55|x|)\Big) & |x|< 1 \\
 \frac{1}{24}(|x|-1)(|x|-2)\Big(-138+|x|(348+|x|(-249+55|x|))\Big)& 1\leq |x|<2 \\
 -\frac{1}{24}(|x|-2)(|x|-3)^2\Big(54+|x|(-50+11|x|)\Big) & 2\leq |x|<3 \nn \\
 0 & |x| \geq 3
 \end{cases}\\
-\widehat{K^{BG}_5}(u)&=\sinc(u)^5 \Big(2(-27+(\pi u)^2)\cos(\pi u)+\sinc(u)(55-19(\pi u)^2)\Big)
+\widehat{K^{bg}_5}(u)&=\sinc(u)^5 \Big(2(-27+(\pi u)^2)\cos(\pi u)+\sinc(u)(55-19(\pi u)^2)\Big)
+\label{eq:quinticBG-kernel}
 \end{align}
-Les dérivées secondes de ce noyaux sont discontinues aux points de jonction $K^{BG}_5(j)$ ($j=1,2,3$). Concernant la régularité de $\widehat{K^{BG}_5}(u)$, nous avons\footnote{Nb. attention $O(x^n)$ est bien "d'ordre de $x^n$" qui n'est pas à confondre avec $o(x^n)$ qui est l'indication de "négligeable par rapport à $x^n$).} $\widehat{K^{BG}_5}(u)=O(u^6)$ et $\widehat{K^{BG}_5}(u-j)=O((u-j)^5)$ pour ($j=1,2,3$). 
+Les dérivées secondes de ce noyaux sont discontinues aux points de jonction $K^{bg}_5(j)$ ($j=1,2,3$). Concernant la régularité de $\widehat{K^{bg}_5}(u)$, nous avons\footnote{Nb. attention $O(x^n)$ est bien "d'ordre de $x^n$" qui n'est pas à confondre avec $o(x^n)$ qui est l'indication de "négligeable par rapport à $x^n$).} $\widehat{K^{bg}_5}(u)=O(u^6)$ et $\widehat{K^{bg}_5}(u-j)=O((u-j)^5)$ pour ($j=1,2,3$). 
 
 C'est là, où j'ai utilisé la liberté du choix de la valeur de $a_{20}$ pour faire écho à la lumière de l'équation \ref{eq:ghosts} de la section \ref{sec:DNapprox} afin de diminuer l'influence des images fantômes. On peut choisir $a_{20}$ de telle façon que $\widehat{K_5}(1)=O((u-1)^6)$ ce qui donne
 \begin{equation}
@@ -816,22 +825,30 @@ a_{20} = -\frac{5}{4}\left(\frac{27-\pi^2}{15-\pi^2}\right)
 \end{equation}
 Ainsi
 \begin{align}
-K^{JE}_5(x) &= \begin{cases}
+K^{je}_5(x) &= \begin{cases}
 \frac{1}{12} \Big((138-55 |x|) |x|-95\Big) |x|^3+\frac{5 \left(\pi ^2-27\right)}{4 \left(\pi^2-15\right)} (|x|-1)^2 (2 |x|-1) x^2 +1& |x|< 1 \\
 \frac{1}{24 \left(\pi^2-15\right)}(|x|-2) (|x|-1) \Big(\pi ^2 (|x| (|x| (25 |x|-114)+153)-48)\Big.& \nn\\
 \qquad\qquad \Big.-15 (|x| ((|x|-6) |x|-3)+24)\Big)& 1\leq |x|<2 \nn\\
 -\frac{1}{24 \left(\pi ^2-15\right)}(|x|-3)^2 (|x|-2) \Big(\pi^2 (|x|-3) (5 |x|-8)-3 (|x|-7) |x|\Big) & 2\leq |x|<3 \nn \\
 0 & |x| \geq 3
 \end{cases}\\
-\widehat{K^{JE}_5}(u)&= \frac{\sinc(\pi u)^5}{\pi^2-15} \left(24 \pi^2 (u^2-1) \cos (\pi u)-(\pi^2 ((39+7 \pi^2) u^2-25)+15) \sinc(\pi  u)\right)
+\widehat{K^{je}_5}(u)&= \frac{\sinc(\pi u)^5}{\pi^2-15} \left(24 \pi^2 (u^2-1) \cos (\pi u)-(\pi^2 ((39+7 \pi^2) u^2-25)+15) \sinc(\pi  u)\right)
+\label{eq:quinticJE-kernel}
 \end{align}
-$K^{JE}_5(j)$ a toutes les dérivées secondes discontinues en $j=0,\dots,3$, tandis qu'en même temps  $\widehat{K^{JE}_5}(u-j)=O((u-j)^6)$ (cf. pas uniquement en $j=0,1$).
+$K^{je}_5(j)$ a toutes les dérivées secondes discontinues en $j=0,\dots,3$, tandis qu'en même temps  $\widehat{K^{je}_5}(u-j)=O((u-j)^6)$ (cf. pas uniquement en $j=0,1$). On vérifie aussi que pour toutes les valeurs de $a_{20}$ à la fois $K_5)$ et $\widehat{K_5}$ sont des partitions de l'unité.
 
-On vérifie aussi que pour toutes les valeurs de $a_{20}$ à la fois $K_5)$ et $\widehat{K_5}$ sont des partitions de l'unité.
+La figure \ref{fig-quintic-kernels} présente les différents noyaux quintiques: $K^{mzv}_5$, $K^{bg}_5$ et $K^{je}_5$. 
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{fig10.png}
+\caption{Les noyaux de type "quintique": $K^{mzv}_5$, $K^{bg}_5$ et $K^{je}_5$  sur le même modèle que la figure \ref{fig-Lanczos-kernel}.}
+\label{fig-quintic-kernels}
+\end{figure}
+
 %
 \subsubsection{Famille de noyaux : B-spline (cardinale)}
 %
-Les \textit{splines} sont un outil très utilisé (math/ingénierie) que je ne peux le couvrir l'ensemble des applications. Concernant l'interpolation, on les présente souvent dans l'espace réel, afin de concevoir une représentation par exemple cubique par morceaux, entres les noeuds dont on connait la position dans un espace multi-dimensionnel. Concernant la possibilité d'obtenir une base orthogonale, on exploite ce que l'on nomme soit les \textit{box splines} \cite{10.5555/1525499}, soit les \textit{B-splines} et les versions "cardinal" \cite{Unser1993a} que nous allons manipuler.  \cite{Costella2021} présente d'une manière illustrée l'obtention des \textit{cardinal B-splines}.  Dans la suite, je vais me concentrer sur un cas particulier pour comparaison avec les sections précédentes. 
+Les \textit{splines} sont un outil très utilisé (math/ingénierie) que je ne peux le couvrir l'ensemble des applications. Concernant l'interpolation, on les présente souvent dans l'espace réel, afin de concevoir une représentation par exemple cubique par morceaux, entres les noeuds dont on connait la position dans un espace multi-dimensionnel. Concernant la possibilité d'obtenir une base orthogonale, on exploite ce que l'on nomme soit les \textit{box splines} \cite{10.5555/1525499}, soit les \textit{B-splines} et les versions "cardinal" \cite{Unser1993a} que nous allons manipuler.  Dans la suite, je vais me concentrer sur un cas particulier pour comparaison avec les sections précédentes. 
 
 En fait l'idée est la suivante. Dans le domaine de Fourier, l'expression du noyau d'une B-spline est la suivante\footnote{Nb. il peut y avoir différentes formulations non seulement via les conventions de la transformée de Fourier, mais aussi si on considère des B-splines centrées ou non.}
 \begin{equation}
@@ -867,7 +884,7 @@ Si $\beta_3(x)$ est une partition de l'unité (en particulier $\sum_{j=-1}^1 \be
 \end{figure}
 %
 
-Remarquons que l'interpolation linéaire ($\beta_1$) (Eq.~\ref{eq:interp-lineaire}) est la convolution de deux $\boxcar$ et qu'il n'a pas les défauts mis en évidence ci-dessus de $\beta_3$. En fait, comme le dit  \cite{Costella2021}, le noyau linéaire a été "flouté" (\textit{blur kernel}). C'est ce qu'il faut corriger, et c'est le sujet des \textit{cardinal B-splines}.
+Remarquons que l'interpolation linéaire ($\beta_1$) (Eq.~\ref{eq:interp-lineaire}) est la convolution de deux $\boxcar$ et qu'il n'a pas les défauts mis en évidence ci-dessus de $\beta_3$. En fait, le noyau linéaire a été "flouté" (\textit{blur kernel}). C'est ce qu'il faut corriger, et c'est le sujet des \textit{cardinal B-splines}.
 
 Le noyau de floutage qui affecte $\beta_3$ est 
 \begin{equation}
@@ -877,7 +894,7 @@ avec $\beta_3(j)=\{1/6,2/3,1/6\}$ pour respectivement $j=\{-1,0,1\}$. La transfo
 \begin{equation}
 \hat{b}_3(u)= \frac{2}{3} + 2\frac{1}{6}\cos(2\pi u) = 1-\frac{2}{3}\sin(\pi u)^2
 \end{equation}
-La première forme est généralisable (voir Eq. 3.22 de \cite{Unser1993a}) et il n'est pas fortuit de trouver les coefficients $\beta_3(0)$ et $\beta_(1)$. La seconde forme permet un usage pratique à suivre. Donc, si l'on veut déconvoluer le "flou", il suffit alors de définir 
+La première forme est généralisable (voir Eq. 3.22 de \cite{Unser1993a}) et il n'est pas fortuit de trouver les coefficients $\beta_3(0)$ et $\beta_3(1)$. La seconde forme permet un usage pratique à suivre. Donc, si l'on veut déconvoluer le "flou", il suffit alors de définir 
 \begin{equation}
 \hat{\gamma}_3(u) = \hat{\beta}_3(u)\times \hat{b}^{-1}_3(u) = \frac{\sinc^4(u)}{1-\frac{2}{3}\sin(\pi u)^2}
 \label{eq:hatgam3}
@@ -900,7 +917,7 @@ avec\footnote{nb. Mathematica aide bien pour trouver la forme compacte.}
 \begin{equation}
 s_3(n) = (-1)^n \sum_{k=0}^\infty \frac{1}{6^{|n|+k}} \binom{2(|n|+k)}{k} =  \frac{(-1)^n\sqrt{3}}{(2+\sqrt{3})^{|n|}}
 \end{equation}
-Remarquons que la propriété:
+Remarquons au passage la propriété:
 \begin{equation}
 \sum_{n=-\infty}^\infty s_3(n) = 1
 \end{equation} 
@@ -921,7 +938,7 @@ De plus si l'on note $s_3(n)=(-1)^n\sqrt{3}a^{|n|}$ avec $a=(2+\sqrt{3})^{-1}=2-
 \end{align}
 (et par symétrie $\gamma_3(-j)=0$).  
 
-Les graphes de $\gamma_3(x)$ et $\hat{\gamma}_3(u)$ comparés à ceux de $\beta_3(x)$ et $\hat{\beta}_3(u)$ sont montrés sur la figure \ref{fig-Bspline3-kernel}. Maintenant, la figure \ref{fig-UnityBsplineCard3} apporte la touche finale en montrant que la B-Spline cardiale partitionne bien l'unité à la fois dans l'espace réel mais aussi dans l'espace de Fourier. Ces propriétés sont aisément démontrable en utilisant concernant l'espace réel, le fait que $\beta_3(x)$ partitionne l'unité  et que la somme des $s_3(n)$ donne l'unité, et concernant l'espace de Fourier remarquons que $\hat{\gamma}_3(u)$ a été conçue pour réaliser cette propriété de partitionnement. 
+Les graphes de $\gamma_3(x)$ et $\hat{\gamma}_3(u)$ comparés à ceux de $\beta_3(x)$ et $\hat{\beta}_3(u)$ sont montrés sur la figure \ref{fig-Bspline3-kernel}. Maintenant, la figure \ref{fig-UnityBsplineCard3} apporte la touche finale en montrant que la B-Spline cardiale partitionne bien l'unité à la fois dans l'espace réel mais aussi dans l'espace de Fourier. Ces propriétés sont aisément démontrables en utilisant, concernant l'espace réel, le fait que $\beta_3(x)$ partitionne l'unité  et que la somme des $s_3(n)$ donne aussi l'unité, et concernant l'espace de Fourier on rappelle que $\hat{\gamma}_3(u)$ a été conçue pour réaliser la propriété de partitionnement. Les développements ci-dessus détaillés pour $\gamma_3$ sont généralisables pour $m$ quelconque, voir par exemple voir \cite{Unser1993a}.
 \begin{figure}
 \centering
 \includegraphics[width=0.4\textwidth]{fig9a.png}
@@ -930,7 +947,16 @@ Les graphes de $\gamma_3(x)$ et $\hat{\gamma}_3(u)$ comparés à ceux de $\beta_
 \label{fig-UnityBsplineCard3}
 \end{figure}
 
+Maintenant, le hic avec $\gamma_3(x)$ qui pourrait être utilisé pour remplacer le sinus cardinal dans notre application (Sec.~\ref{sec:DNapprox}), c'est son support. En principe, il est de taille infini. On peut certes tenter une approximation en utilisant une partie des coefficients $s_3(n)$, mais la figure \ref{fig-cubic-kernels-x-support} permet de comparer le support de différents noyaux "cubiques". On se rend compte que si le support de $\beta_3$ est $[-2,2]$, le support d'une approximation  de $\gamma_3(x)$ devrait être au minimum $[-3,3]$ voire $[-4,4]$. En comparaison les noyaux quintiques "MZV" (Eq.~\ref{eq:quinticMZV-kernel}), "BG" (Eq.~\ref{eq:quinticBG-kernel}) et "JE" (Eq.~\ref{eq:quinticJE-kernel}) ont un support $[-3,3]$, et un B-Spline cardinal quintique serait encore plus important. 
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{fig11.png}
+\caption{Comparaison de $|\beta_3(x)|$, $|\gamma_3(x)|$ et du noyau cubique (ex. celui de "MZV" (Eq.~\ref{eq:cubic-kernel}). Un noyau "quintique" de a un support $[-3,3]$.}
+\label{fig-cubic-kernels-x-support}
+\end{figure}
+Or, nous avons motivé (Sec.~\ref{sec:interpFinite}) le fait de choisir des noyaux dont la taille de ce support est le plus petit possible (intervenant au carré) moyennant des qualités pour réduire les images fantômes.  
 
+Il est à noter que \cite{Costella2021} motive l'utilisation d'approximations en modifiants les coefficients $s_3(n)$ afin de procéder à des opérations sur des images codées en 8bits de Facebook et autres réseaux sociaux. L'auteur a une jolie façon d'obtenir les représentations de  $\beta_m(x)$. C'est assez original qu'il n'est cependant pas remarqué, qu'il (re)construisait les B-Splines, et que ses "Magic Kernel(s) Sharp" sont les B-Splines cardinal.
 %
 %\begin{figure}[h]
 %\centering
