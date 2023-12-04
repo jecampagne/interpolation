@@ -956,7 +956,51 @@ Maintenant, le hic avec $\gamma_3(x)$ qui pourrait être utilisé pour remplacer
 \end{figure}
 Or, nous avons motivé (Sec.~\ref{sec:interpFinite}) le fait de choisir des noyaux dont la taille de ce support est le plus petit possible (intervenant au carré) moyennant des qualités pour réduire les images fantômes.  
 
-Il est à noter que \cite{Costella2021} motive l'utilisation d'approximations en modifiants les coefficients $s_3(n)$ afin de procéder à des opérations sur des images codées en 8bits de Facebook et autres réseaux sociaux. L'auteur a une jolie façon d'obtenir les représentations de  $\beta_m(x)$. C'est assez original qu'il n'est cependant pas remarqué, qu'il (re)construisait les B-Splines, et que ses "Magic Kernel(s) Sharp" sont les B-Splines cardinal.
+
+On peut se faire une idée du problème en posant le problème de trouver les coefficients $s_3(n)$ autrement. Je vais suivre la démarche de \cite{Costella2021} en adaptant les notations. En fait, rappelons que pour la version "cardinale" $\gamma_3(n)=0$ pour $|n|\geq 1$. Une approximation d'ordre $o$ consiste alors à requérir que $\gamma^{(o)}_3(n)=0$ pour $1\leq n\leq o$. On peut généraliser  pour un $m$ quelconque, mais nous limiterons le propos pour des BSplines tels que $\beta_m(n\geq 3)=0$. Les coefficients $S=\{s_m(n)\}_{1\geq n}$ (sachant que $s_m(-n)=s_m(n)$ et $\sum_{n=-\infty}^\infty s_m(n)=1$ ce qui donne $s_m(0)$) sont alors solutions d'un système linéaire de la forme (indexation commençant à 1)
+\begin{equation}
+(A+Z-2B^T R)S+B^T = 0
+\end{equation}
+La solution d'ordre $o$ tronque les matrices pour n'avoir que $o$ lignes ou colonnes. Les matrices se lisent 
+\begin{equation}
+A= \begin{bmatrix}
+\beta_0 & \beta_1&\beta_2 & 0 & 0 & 0 & 0 & 0 &\ldots\\
+\beta_1 & \beta_0 & \beta_1&\beta_2 & 0 & 0 &0 & 0 &\ldots \\
+\beta_2 & \beta_1 & \beta_0 & \beta_1&\beta_2 & 0 & 0&0 & \ldots\\
+0 & \beta_2 & \beta_1 & \beta_0 & \beta_1&\beta_2 & 0 &0& \ldots\\
+0& 0 & \beta_2 & \beta_1 & \beta_0 & \beta_1&\beta_2 & 0 & \ldots\\
+\vdots & \vdots & \vdots  & \vdots & \vdots &\vdots & \vdots & \ddots
+\end{bmatrix}_{o,o}
+\end{equation}
+\begin{equation}
+Z = 0_{o,o}, \qquad Z(1,1)=\beta_2
+\end{equation}
+\begin{equation}
+B = (\beta_1,\beta_2,0,\ldots)_{1,o}, \quad R=1_{1,o}
+\end{equation}
+Cela donne par exemple:
+\begin{table}
+\centering
+\begin{tabular}{cc|*{20}{c}}
+\toprule
+ $m$ & $o$ & $s_1$ & $s_2$ & $s_3$ & $s_4$  \\ \midrule
+   3 & 1   & $2$   & $-\frac{1}{2}$ &       & \\
+   . & 3   & $\frac{7}{4}$& $-\frac{15}{32}$&$\frac{1}{8}$&$-\frac{1}{32}$&   \\ \midrule
+   5 & 1   & $\frac{67}{15}$&$-\frac{26}{15}$& \\
+   . & 3   & $\frac{20323}{6600}$&$-\frac{3133}{2200}$&$\frac{13173}{22000}$&$-\frac{884}{4125}$ & \\
+\bottomrule
+\end{tabular}
+\caption{Exemples} 
+\label{tab-tmp}
+\end{table}
+
+
+
+
+
+
+Il est à noter que \cite{Costella2021} motive l'utilisation d'approximations en modifiants les coefficients $s_3(n)$ afin de procéder à des opérations sur des images codées en 8bits de Facebook et autres réseaux sociaux. Mais dans le cadre des surveys astro, les images SDSS étaient codées sur 16 bits unsigned/pixel\footnote{\url{https://classic.sdss.org/dr7/dm/flatFiles/sdR.php}} et LSST a opté pour 18 bits unsigned/pixel. Donc, il faudrait
+ L'auteur a une jolie façon d'obtenir les représentations de  $\beta_m(x)$. C'est assez original qu'il n'est cependant pas remarqué, qu'il (re)construisait les B-Splines, et que ses "Magic Kernel(s) Sharp" sont les B-Splines cardinal.
 %
 %\begin{figure}[h]
 %\centering
