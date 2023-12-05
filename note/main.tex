@@ -930,6 +930,7 @@ La parité de $\gamma_3$ et la même que celle de $\beta_3$. Notons qu'étant do
 \begin{align}
 \gamma_3(0) &=\sum_{n=-\infty}^\infty s_3(n) \beta_3(n)
 = \left\{-\frac{\sqrt{3}}{2+\sqrt{3}},\sqrt{3},-\frac{\sqrt{3}}{2+\sqrt{3}}\right\}.\left\{\frac{1}{6},\frac{2}{3},\frac{1}{6}\right\} = 1
+\label{eq:gamma30}
 \end{align}
 De plus si l'on note $s_3(n)=(-1)^n\sqrt{3}a^{|n|}$ avec $a=(2+\sqrt{3})^{-1}=2-\sqrt{3}$, alors pour $j\geq 1$ nous avons
 \begin{align}
@@ -947,21 +948,21 @@ Les graphes de $\gamma_3(x)$ et $\hat{\gamma}_3(u)$ comparés à ceux de $\beta_
 \label{fig-UnityBsplineCard3}
 \end{figure}
 
-Maintenant, le hic avec $\gamma_3(x)$ qui pourrait être utilisé pour remplacer le sinus cardinal dans notre application (Sec.~\ref{sec:DNapprox}), c'est son support. En principe, il est de taille infini. On peut certes tenter une approximation en utilisant une partie des coefficients $s_3(n)$, mais la figure \ref{fig-cubic-kernels-x-support} permet de comparer le support de différents noyaux "cubiques". On se rend compte que si le support de $\beta_3$ est $[-2,2]$, le support d'une approximation  de $\gamma_3(x)$ devrait être au minimum $[-3,3]$ voire $[-4,4]$. En comparaison les noyaux quintiques "MZV" (Eq.~\ref{eq:quinticMZV-kernel}), "BG" (Eq.~\ref{eq:quinticBG-kernel}) et "JE" (Eq.~\ref{eq:quinticJE-kernel}) ont un support $[-3,3]$, et un B-Spline cardinal quintique serait encore plus important. 
-\begin{figure}
-\centering
-\includegraphics[width=0.4\textwidth]{fig11.png}
-\caption{Comparaison de $|\beta_3(x)|$, $|\gamma_3(x)|$ et du noyau cubique (ex. celui de "MZV" (Eq.~\ref{eq:cubic-kernel}). Un noyau "quintique" de a un support $[-3,3]$.}
-\label{fig-cubic-kernels-x-support}
-\end{figure}
-Or, nous avons motivé (Sec.~\ref{sec:interpFinite}) le fait de choisir des noyaux dont la taille de ce support est le plus petit possible (intervenant au carré) moyennant des qualités pour réduire les images fantômes.  
+Maintenant, le hic avec $\gamma_3(x)$ qui pourrait être utilisé pour remplacer le sinus cardinal dans notre application (Sec.~\ref{sec:DNapprox}), c'est son support. En principe, il est de taille infini. 
+%On peut certes tenter une approximation en utilisant une partie des coefficients $s_3(n)$, mais la figure \ref{fig-cubic-kernels-x-support} permet de comparer le support de différents noyaux "cubiques". On se rend compte que si le support de $\beta_3$ est $[-2,2]$, le support d'une approximation  de $\gamma_3(x)$ devrait être au minimum $[-3,3]$ voire $[-4,4]$. En comparaison les noyaux quintiques "MZV" (Eq.~\ref{eq:quinticMZV-kernel}), "BG" (Eq.~\ref{eq:quinticBG-kernel}) et "JE" (Eq.~\ref{eq:quinticJE-kernel}) ont un support $[-3,3]$, et un B-Spline cardinal quintique serait encore plus important. 
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.4\textwidth]{fig11.png}
+%\caption{Comparaison de $|\beta_3(x)|$, $|\gamma_3(x)|$ et du noyau cubique (ex. celui de "MZV" (Eq.~\ref{eq:cubic-kernel}). Un noyau "quintique" de a un support $[-3,3]$.}
+%\label{fig-cubic-kernels-x-support}
+%\end{figure}
+Or, nous avons motivé (Sec.~\ref{sec:interpFinite}) le fait de choisir des noyaux dont la taille de support est le plus petit possible (intervenant au carré) moyennant des qualités pour réduire les images fantômes.  On peut tenter de procéder à une approximation qui permettrait de réduire le support de $\gamma_m(x)$. Mais on va tout de même avoir un problème.
 
-
-On peut se faire une idée du problème en posant le problème de trouver les coefficients $s_3(n)$ autrement. Je vais suivre la démarche de \cite{Costella2021} en adaptant les notations. En fait, rappelons que pour la version "cardinale" $\gamma_3(n)=0$ pour $|n|\geq 1$. Une approximation d'ordre $o$ consiste alors à requérir que $\gamma^{(o)}_3(n)=0$ pour $1\leq n\leq o$. On peut généraliser  pour un $m$ quelconque, mais nous limiterons le propos pour des BSplines tels que $\beta_m(n\geq 3)=0$. Les coefficients $S=\{s_m(n)\}_{1\geq n}$ (sachant que $s_m(-n)=s_m(n)$ et $\sum_{n=-\infty}^\infty s_m(n)=1$ ce qui donne $s_m(0)$) sont alors solutions d'un système linéaire de la forme (indexation commençant à 1)
+On peut se faire une idée du problème se posant la question de trouver les coefficients $s_3(n)$ autrement que la démarche entreprise ci-dessus. Je vais suivre la démarche\footnote{nb. L'article non publié de l'auteur est très pédagogique, tourné pour des applications Web de type Facebook, Instagram même s'il mentionne que ces approximations devrait être revues pour des applications plus demandeuses de précisions. C'est ce que l'on constate d'ailleurs. C'est assez original que l'auteur n'est pas remarqué qu'il (re)construisait les B-Splines, et que ses "Magic Kernel(s) Sharp" sont les B-Splines cardinal.} de \cite{Costella2021} en adaptant les notations. En fait, rappelons que pour la version "cardinale" $\gamma_3(n)=0$ pour $|n|\geq 1$ et que cela est généralisable pour d'autres valeurs de $m$. Une approximation d'ordre $o$ consiste alors à requérir que $\gamma^{(o)}_3(n)=0$ pour $1\leq n\leq o$. Dans la suite on se limite aux  B-Splines tels que $\beta_m(n\geq 3)=0$. Les coefficients $S^=\{s_m(n)\}_{1\geq n}$ (sachant que $s_m(-n)=s_m(n)$ et $\sum_{n=-\infty}^\infty s_m(n)=1$ ce qui donne $s_m(0)$) sont alors solutions d'un système linéaire de la forme (indexation commençant à 1) est la suivante
 \begin{equation}
 (A+Z-2B^T R)S+B^T = 0
 \end{equation}
-La solution d'ordre $o$ tronque les matrices pour n'avoir que $o$ lignes ou colonnes. Les matrices se lisent 
+ Les matrices se lisent 
 \begin{equation}
 A= \begin{bmatrix}
 \beta_0 & \beta_1&\beta_2 & 0 & 0 & 0 & 0 & 0 &\ldots\\
@@ -978,29 +979,65 @@ Z = 0_{o,o}, \qquad Z(1,1)=\beta_2
 \begin{equation}
 B = (\beta_1,\beta_2,0,\ldots)_{1,o}, \quad R=1_{1,o}
 \end{equation}
-Cela donne par exemple:
+La solution d'ordre $o$ tronque les matrices pour n'avoir que $o$ lignes ou colonnes. Cela donne par exemple les solutions disposées dans la table \ref{tab-scoeff-bsplinecardapprox}.
 \begin{table}
+\small
 \centering
 \begin{tabular}{cc|*{20}{c}}
 \toprule
- $m$ & $o$ & $s_1$ & $s_2$ & $s_3$ & $s_4$  \\ \midrule
-   3 & 1   & $2$   & $-\frac{1}{2}$ &       & \\
-   . & 3   & $\frac{7}{4}$& $-\frac{15}{32}$&$\frac{1}{8}$&$-\frac{1}{32}$&   \\ \midrule
-   5 & 1   & $\frac{67}{15}$&$-\frac{26}{15}$& \\
-   . & 3   & $\frac{20323}{6600}$&$-\frac{3133}{2200}$&$\frac{13173}{22000}$&$-\frac{884}{4125}$ & \\
+ $m$ & $o$ & $s_m(\pm 1)$ & $s_m(\pm 2)$ & $s_m(\pm 3)$ & $s_m(\pm 4)$ & $\ldots$& \\ \midrule
+   3 & 1   & $-\frac{1}{2}$ &       & \\
+   . & 3   &  $-\frac{15}{32}$&$\frac{1}{8}$&$-\frac{1}{32}$&   \\
+   . & 5   &  $-\frac{209}{450}$& $\frac{28}{225}$ & $-\frac{1}{30}$  & $\frac{2}{225}$&$-\frac{1}{450}$& \\ \midrule
+   5 & 1   & $-\frac{26}{15}$& \\
+   . & 3   & $-\frac{3133}{2200}$&$\frac{13173}{22000}$&$-\frac{884}{4125}$ & \\
+   . & 8   & $-1.32017$ & $0.57265$& $-0.24674$& $0.10623$& $-0.04569$& $0.01956$& 
+$-0.00816$& $0.00292$ \\
 \bottomrule
 \end{tabular}
-\caption{Exemples} 
-\label{tab-tmp}
+\caption{Exemples de listes de coefficients $s_m$ pour différentes ordres d'approximation $o$ concernant les BSplines $\gamma^{(o)}_3$ et $\gamma^{(o)}_5$.} 
+\label{tab-scoeff-bsplinecardapprox}
 \end{table}
+Une fois les valeurs de $\{s^{(o)}_m(n)\}_{1\leq n\leq o+1}$ obtenues, alors $\gamma_m^{(o)}(x)$ est le résultat d'une convolution de type Eq.~\ref{eq:gam3} où l'on remplace la séquence des $\{s_m(n)\}$. On peut apprécier la convergence de $\gamma^{(o)}_3$ vers $\gamma_3$ tant dans l'espace réel (Fig.~\ref{fig-gamma3-approx-real}) que dans l'espace de Fourier (Fig.~\ref{fig-gamma3-approx-fourier}). La partition de l'unité dans l'espace de Fourier n'est pas assurée parfaitement à cause des oscillations non compensées dans la première zone de Nyquist, comme on peut le voir sur la figure  \ref{fig-gamma3-approx-unite-fourier}, mais cela reste dans l'ordre de grandeur de $0.001$.
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{fig13a.png}
+\includegraphics[width=0.4\textwidth]{fig13b.png}
+\caption{Quelques graphes concernant les approximations de $\gamma_3$ dans l'espace réel.}
+\label{fig-gamma3-approx-real}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth]{fig14a.png}
+\includegraphics[width=0.4\textwidth]{fig14b.png}
+\caption{Quelques graphes concernant les approximations de $\gamma_3$ dans l'espace de Fourier.}
+\label{fig-gamma3-approx-fourier}
+\end{figure}
 
 
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{fig12.png}
+\caption{Evolution de $\gamma_m^{(o)}(0)$ en fonction de l'ordre $o$.}
+\label{fig-gammaappat0}
+\end{figure}
 
 
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{fig14c.png}
+\caption{Partition de l'unité pour l'approximation $\widehat{\gamma^{(5)}_3}$.}
+\label{fig-gamma3-approx-unite-fourier}
+\end{figure}
 
 
-Il est à noter que \cite{Costella2021} motive l'utilisation d'approximations en modifiants les coefficients $s_3(n)$ afin de procéder à des opérations sur des images codées en 8bits de Facebook et autres réseaux sociaux. Mais dans le cadre des surveys astro, les images SDSS étaient codées sur 16 bits unsigned/pixel\footnote{\url{https://classic.sdss.org/dr7/dm/flatFiles/sdR.php}} et LSST a opté pour 18 bits unsigned/pixel. Donc, il faudrait
- L'auteur a une jolie façon d'obtenir les représentations de  $\beta_m(x)$. C'est assez original qu'il n'est cependant pas remarqué, qu'il (re)construisait les B-Splines, et que ses "Magic Kernel(s) Sharp" sont les B-Splines cardinal.
+Cependant, si $\gamma_m(0)=1$ (ex. Eq.~\ref{eq:gamma30}), la figure \ref{fig-gammaappat0} montre que pour atteindre la précision de $\pm 0.001$ il nous faut utiliser une approximation d'ordre $o$ égale à 5 et 8 (environ) pour respectivement $m=3$ et $m=5$. Or, passer de $o$ et $o+1$ incrémente la taille du support de $\gamma_m^{(o)}(x)$ de 2 unités, car on rajoute une version de $\beta_m$ décalée aux deux extrémités du précédent support (voir le zoom de la figure \ref{fig-gamma3-approx-real}). Comme le support de $\beta_3$ (resp. $\beta_5$) est de $4$ (resp. $6$) cela signifie qu'il faudrait une approximation de $\gamma_3$ et $\gamma_5$ dont le support est multipliés d'environ un facteur $3.5$. Ce facteur est à prendre au carré dans le cas des images, soit donc un bon facteur 10 de complexité supplémentaire. Cela est bien trop prohibitif en comparaison des supports de versions cubiques et quintiques des sections précédentes. 
+
+Ceci clôt cette section dédiée au B-Splines cardinales qui sont des outils très utilisés cependant, mais que nous omettrons dans la suite pour les raisons exposées.
+%Un point qui irait dans le bon sens est que $\widehat{\gamma^{(o)}}_m(u)=(u-1)^{m+1)+O((u-1)^{m+2))$ indépendamment de l'ordre d'approximation, ce qui représenterait une meilleure évolution au voisinage de $u=1$ pour une BSpline cardinal quintique que celles obtenues avec $K_5^{bg}$ et $K_5^{je}$.
+%
+%Il est à noter que \cite{Costella2021} motive l'utilisation d'approximations en modifiants les coefficients $s_3(n)$ afin de procéder à des opérations sur des images codées en 8bits de Facebook et autres réseaux sociaux. Mais dans le cadre des surveys astro, les images SDSS étaient codées sur 16 bits unsigned/pixel\footnote{\url{https://classic.sdss.org/dr7/dm/flatFiles/sdR.php}} et LSST a opté pour 18 bits unsigned/pixel. Donc, il faudrait
+% L'auteur a une jolie façon d'obtenir les représentations de  $\beta_m(x)$. 
 %
 %\begin{figure}[h]
 %\centering
@@ -1028,6 +1065,10 @@ Il est à noter que \cite{Costella2021} motive l'utilisation d'approximations en
 %    shifts_sym (Bool) : if True, the shifts are not symetrized
 %    """
 %\end{lstlisting}
+%
+\subsection{Bilan}
+%
+
 
 %
 \section{Résumé}
