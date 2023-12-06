@@ -606,7 +606,11 @@ Maintenant,  $\widehat{\tilde{K}_x}(u)$ mélange des composantes des  bandes lat
 %
 \section{Noyaux pour remplacer le sinus cardinal}
 %
-Dans cette section, je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons déjà nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Par exemple, je ne considère pas les noyaux non séparables comme celui développé par les auteurs de l'article \citep{Shi2006ImageIB}. On peut également avoir un oeil sur la revue \cite{Parsania2016}. Je vais plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} \citep{2011ASPC..442..435B} et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris sommairement les noyaux de type B-Spline et B-Spline cardinal, car ils sont souvent utilisés dans bien des applications.
+
+\textit{avertissement: cette section aurait pu faire par elle-même une note en soi. Elle un peu longue et vous pouvez directement aller au "Bilan" (Sec.~\ref{sec:bilan-interpol}).  
+}
+
+Je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Je ne considère pas les noyaux non séparables comme ceux développés par les auteurs de l'article \citep{Shi2006ImageIB}. Pour une "revue", il peut être intéressant de lire \cite{Parsania2016}. Je vais donc plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} \citep{2011ASPC..442..435B} et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris les noyaux de type B-Spline et B-Spline \textit{cardinal}, qui sont souvent utilisés dans bien des applications mais qui pour celle qui nous occupe s'avèreront inadaptés.
 %
 \subsection{Noyaux de C. Lanczos}
 %
@@ -1067,6 +1071,7 @@ Ceci clôt cette section dédiée au B-Splines cardinales qui sont des outils tr
 %\end{lstlisting}
 %
 \subsection{Bilan}
+\label{sec:bilan-interpol}
 %
 
 
