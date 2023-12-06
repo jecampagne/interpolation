@@ -14,6 +14,7 @@
 \usepackage{multirow}
 \usepackage{fontawesome}
 \usepackage{ulem}
+\usepackage{wasysym} %\permil in mathmode
 
 \usepackage{bigints}
 %%%%\usepackage[lite]{mtpro2}
@@ -441,6 +442,7 @@ Or,
 Donc $\hat{f_d}$ est la convolution de la fonction qui prend ses échantillons de la DFT de $f$ (c'est-à-dire les $\{\tilde{a}_k\}$) aux points $u_k=k/N$ et d'un noyau $D_N$. Quel est son expression? Nous avons
 \begin{align}
 \D_N(x) =  \frac{1}{N}\sum_{j=-N/2}^{N/2-1} e^{-2\pi i j x} = e^{i\pi x} \frac{\sin(N \pi x)}{N \sin(\pi x)} = e^{i\pi x} \frac{\sinc(N x)}{\sinc(x)}
+\label{eq:sinc-periodic}
 \end{align}
 Sa transformée de Fourier s'écrit:
 \begin{equation}
@@ -607,7 +609,7 @@ Maintenant,  $\widehat{\tilde{K}_x}(u)$ mélange des composantes des  bandes lat
 \section{Noyaux pour remplacer le sinus cardinal}
 %
 
-\textit{avertissement: cette section aurait pu faire par elle-même une note en soi. Elle un peu longue et vous pouvez directement aller au "Bilan" (Sec.~\ref{sec:bilan-interpol}).  
+\textit{avertissement: cette section est un peu longue et aurait pu faire par elle-même une note en soi. Je la garde ici par soucis de cohérence. Dans un premier temps, vous pouvez directement aller au "Bilan" (Sec.~\ref{sec:bilan-interpol}).  
 }
 
 Je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Je ne considère pas les noyaux non séparables comme ceux développés par les auteurs de l'article \citep{Shi2006ImageIB}. Pour une "revue", il peut être intéressant de lire \cite{Parsania2016}. Je vais donc plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} \citep{2011ASPC..442..435B} et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris les noyaux de type B-Spline et B-Spline \textit{cardinal}, qui sont souvent utilisés dans bien des applications mais qui pour celle qui nous occupe s'avèreront inadaptés.
@@ -1070,9 +1072,58 @@ Ceci clôt cette section dédiée au B-Splines cardinales qui sont des outils tr
 %    """
 %\end{lstlisting}
 %
-\subsection{Bilan}
+\subsection{Bilan et nécessité du 0-\textit{padding}}
 \label{sec:bilan-interpol}
 %
+A ce stade, un petit rappel peut s'imposer. Il nous faut trouver une approximation du \textit{sinus cardinal périodique} $D_N$ (Sec.~\ref{sec:interpFinite}, Eq.~\ref{eq:sinc-periodic}) qui agit dans l'espace de Fourier comme interpolateur. Ce noyau "imparfait" noté $K_u$ doit satisfaire deux critères élaborés dans la section \ref{sec:DNapprox}, au travers de la reconstruction d'une fonction élémentaire de type impulsionnelle $f_d(x)=a_n \delta(x-n)$ (Eq.\ref{eq:ghosts}), à savoir pour $u=n/N\in[-1/2, 1/2]$:
+\begin{align}
+E_0(u) &= \sum_{j\neq 0} \widehat{K_u}(j+u)
+\quad \mathrm{et}\quad  \widehat{K_u}(1+u)
+\label{eq:error-funct}
+\end{align}
+doivent être \textit{tous deux le plus petit possible}. Primo, pour reproduire l'image principale, et secundo faire en sorte de diminuer les images fantômes dominantes (cf. celles du premier ordre). La figure \ref{fig-E0-et-ghostsfactor} donne l'allure de ces deux fonctions d'erreur pour des noyaux étudiés dans cette section. 
+Juste pour montrer que les images fantômes d'ordres supérieures sont bien plus faibles, la fonction $\widehat{K_u}(2+u)$ est montrée sur la figure \ref{fig-2nd-ghostsfactor}.
+
+On remarque immédiatement (Fig.~\ref{fig-E0-et-ghostsfactor}) que le critère d'obtenir des erreurs inférieures ou égales à $\pm 1\permil$ sur l'ensemble de la plage $[-1/2, 1/2]$ n'est pas satisfait. Mais, on peut plonger l'image initiale, pour laquelle l'échantillonnage $(a_n)$  se situe dans l'intervalle tel que $n\in\Iintv{-N/2,N/2-1}$ ($u=n/N \in [-1/2,1/2]$), dans une image plus grande constituée de zéros en dehors des $N\times N$ pixels centraux. C'est la procédure de 0-\textit{padding}. On augmente alors $N$ d'un facteur $2$, $4$ ou $6$ ce qui contraint respectivement les valeurs de $u$ telles que $|u|<\{1/4,1/8,1/12\}$. Ce qui est indiqué par les flèches dans les figures  \ref{fig-E0-et-ghostsfactor} et \ref{fig-2nd-ghostsfactor}. Dans ce cas, selon les noyaux, on peut trouver le facteur de \textit{padding} adéquat pour satisfaire le critère.  
+
+
+Consultons alors la table \ref{tab-scoeff-bsplinecardapprox} où sont recueillies des données chiffrées permettant de comparer les différents noyaux. On se rend compte,  qu'il est nécessaire d'au moins faire un \textit{padding} $\times 2$, et d'utiliser des \textbf{noyaux "quintiques"} pour un padding de $\times 4$ au lieu du noyau cubique, ce qui constitue la principale conclusion de \cite{2014PASP..126..287B}. Cependant, le noyau préconisé était celui noté $K_5^{bg}$ (Eq.~\ref{eq:quinticBG-kernel}). Ce que l'on constate, c'est que \textbf{le noyaux $K_5^{je}$ }(Eq.~\ref{eq:quinticJE-kernel}) \textbf{obtient des scores environ deux fois meilleurs}, ce qui est nouveau.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{fig15a.png}
+\includegraphics[width=0.9\textwidth]{fig15b.png}
+\caption{Fonctions $E_0(u)$ et $\widehat{K_u}(1+u)$ pour $u=x/N\in[-1/2,1/2]$ pour des interpolants détaillés dans la section. La zone grisée indique la zone des $\pm 1\permil$.}
+\label{fig-E0-et-ghostsfactor}
+\end{figure}
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{fig16.png}
+\caption{La fonction $\widehat{K_u}(2+u)$ dans las mêmes conditions de la figure \ref{fig-E0-et-ghostsfactor}.}
+\label{fig-2nd-ghostsfactor}
+\end{figure}
+
+\begin{table}
+\small
+\centering
+\begin{tabular}{c|c|c|cc|cc|cc}
+\toprule
+         &         &           & \multicolumn{6}{c}{Erreur max.} \\ 
+         &         &           & \multicolumn{2}{c}{"2x"} & \multicolumn{2}{|c}{"4x"} & \multicolumn{2}{|c}{"6x"} \\
+noyau    & support & $u_{max}$  &   $|E_0|$ & $|\widehat{K_u}(1+u)|$ & $|E_0|$ & $|\widehat{K_u}(1+u)|$ & $|E_0|$ & $|\widehat{K_u}(1+u)|$  \\ \midrule
+$K_3$    &   4     &  $2.74$   &   $0.06090$ &	 $\mathbf{0.06256}$ & $0.00449$ & 	 $\mathbf{0.00611}$ & $ 0.00092$ &  	$\mathbf{0.00160}$ \\
+$K_5^{mzv}$ & 6    & $1.70$ &   $0.05446$ 	& $\mathbf{0.05638}$ & $0.00382$ & $\mathbf{0.00483}$ &  $0.00077$ 	 & $\mathbf{0.00120}$ \\
+$K_5^{bg}$ & 6    & $3.62$ &   $0.02165$ 	& $\mathbf{0.03696}$ & $0.00045$ & $\mathbf{0.00123}$ &  $0.00004$ 	 & $\mathbf{0.00016}$ \\
+$K_5^{je}$ & 6    & $3.69$ &   $0.02990$ 	& $\mathbf{0.01768}$ & $\mathbf{0.00064}$ & $0.00031$ &  $\mathbf{0.00006}$ 	 & $0.00003$ \\
+Lanczos-3 & 6     &  $1.49$ &  $0.00012$ 	 & $\mathbf{0.01280}$ & $0.00012$ &  	$\mathbf{0.00358}$ & $0.00012$ &  	 $\mathbf{0.00353}$ \\
+Lanczos-5 & 10    &  $1.08$ & $0.00360$  &  $\mathbf{0.00424}$ & $0.00005$ & $\mathbf{0.00225}$ & $0.00005$ & 	 $\mathbf{0.00122}$ \\
+\bottomrule
+\end{tabular}
+\caption{Données chiffrées de noyaux étudiés dans la section \ref{sec:DNapprox}: outre le support, $u_{max}$ est la valeur de $|u|$ (dans l'espace de Fourier) pour laquelle les lobes ont une valeur absolue plus grande que $10^{-3}$. Les autres données indiques les valeurs maximales sur les plages $|u|<\{1/4,1/8,1/12\}$ des valeurs absolues des fonctions d'erreur (Eq.~\ref{eq:error-funct}) pour les 0-\textit{padding} de type $\times 2$, $\times 4$ et $\times 6$, respectivement. Les valeurs en gras sont les plus grandes entre les deux fonctions. Le seuil de $0.001$ est celui recherché pour choisir le noyau et le \textit{padding}.}
+\label{tab-scoeff-bsplinecardapprox}
+\end{table}
+
 
 
 %
@@ -1080,7 +1131,7 @@ Ceci clôt cette section dédiée au B-Splines cardinales qui sont des outils tr
 % 
 
 %%%%%%%%%%
-%\newpage
+\newpage
 \addcontentsline{toc}{section}{Références}
 % Put your bibiliography file here
 %\section{Bibliography}
