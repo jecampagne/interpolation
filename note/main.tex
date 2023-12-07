@@ -672,6 +672,7 @@ Finalement, un polynôme échantillonné ne peut être interpolé exactement par
 Dans cette section, je vais m'intéresser à une classe large de noyaux à support fini constitués de polynômes par morceaux. Les conditions de continuité aux points de $\mathbb{Z}$ constituent des familles de noyaux. 
 %
 \subsubsection{Famille de noyaux "MZV"}
+\label{sec:MZVkernels}
 %
 Je commence par les noyaux d'écrits dans l'article \cite{Meijering1999}. Ils sont définis de la sorte:
 \begin{enumerate}
@@ -786,10 +787,11 @@ Ainsi, les choix $c=(-1/2,3/64)$ permettent non seulement de contrôler les $\wi
 \end{figure}
 %
 \subsubsection{Famille de noyaux "BG" dont une variante quintique}
+\label{sec:BGKernels}
 % 
 \cite{2014PASP..126..287B} proposent dans leur articles non pas une famille en tant que telle, car ils se focalisent sur un noyau quintique, mais on peut retrouver dans un même schéma, le noyau cubique de $K^{mzv}_3(x)$ autrement appelé le noyau de Catmull-Rom,  la version "BG" de noyau quintique ainsi qu'une variante, elle-même différente de $K^{mzv}_5(x)$.
 
-Pour cela, on utilise la même définition des noyaux MZV ainsi que les même notations, notamment le paramètre $m$ donne non seulement la taille du support du noyau, et aussi le degré des polynômes $n=2m-1$. Il y a donc $2m^2$ coefficients à déterminer. Les contraintes imposées sont les suivantes:
+Pour cela, on utilise la même définition des noyaux MZV ainsi que les même notations, notamment le paramètre $m$ donne non seulement la taille du support du noyau, et aussi le degré des polynômes $n=2m-1$. Il y a donc $2m^2$ coefficients à déterminer\footnote{Un script Mathematica permet de trouver les solutions pour le noyau cubique, la famille de noyaux quintiques, et pour un noyau spetique non exposé (voir Sec.~\ref{sec:MathBG}).}. Les contraintes imposées sont les suivantes:
 \begin{itemize}
 \itemb on commence par série des contraintes identiques Eqs.~\ref{eq:Constraints_1}:
 \begin{align}
@@ -812,7 +814,7 @@ et pour $m\geq3$
 \end{itemize}
 Pour $m=2$ ($n=3$), on retrouve le noyau cubique de la section précédente. Concernant $m=3$ ($n=5)$, les coefficients $\{a_{ji}\}$ sont tous déterminés sauf 1 que l'on peut choisir $a_{20}$. On peut alors avoir plusieurs choix pour déterminer cette dernière inconnue.
 
-Soit on fixe $a_{20}=0$, ce qui donne la forme de noyau quintique de l'article \cite{2014PASP..126..287B} à savoir\footnote{Nb. l'expression dans l'article n'est pas correcte puisqu'il faut assurer que $K(-x)=K(x)$, c'est-à-dire qu'il faut faire apparaître les valeurs absolues. Le code de \textsf{GalSim} utilise la bonne formulation. De plus je donne ici la TF du }
+Soit on fixe $a_{20}=0$, ce qui donne la forme de noyau quintique de l'article \cite{2014PASP..126..287B} à savoir\footnote{Nb. l'expression dans l'article n'est pas correcte puisqu'il faut assurer que $K(-x)=K(x)$, c'est-à-dire qu'il faut faire apparaître les valeurs absolues. Le code de \textsf{GalSim} utilise la bonne formulation. De plus, je donne ici la TF du noyau.}
 \begin{align}
 K^{bg}_5(x) &= \begin{cases}
 1 + \frac{1}{12}|x|^3 \Big(-95+|x|(138-55|x|)\Big) & |x|< 1 \\
@@ -1087,7 +1089,7 @@ Juste pour montrer que les images fantômes d'ordres supérieures sont bien plus
 On remarque immédiatement (Fig.~\ref{fig-E0-et-ghostsfactor}) que le critère d'obtenir des erreurs inférieures ou égales à $\pm 1\permil$ sur l'ensemble de la plage $[-1/2, 1/2]$ n'est pas satisfait. Mais, on peut plonger l'image initiale, pour laquelle l'échantillonnage $(a_n)$  se situe dans l'intervalle tel que $n\in\Iintv{-N/2,N/2-1}$ ($u=n/N \in [-1/2,1/2]$), dans une image plus grande constituée de zéros en dehors des $N\times N$ pixels centraux. C'est la procédure de 0-\textit{padding}. On augmente alors $N$ d'un facteur $2$, $4$ ou $6$ ce qui contraint respectivement les valeurs de $u$ telles que $|u|<\{1/4,1/8,1/12\}$. Ce qui est indiqué par les flèches dans les figures  \ref{fig-E0-et-ghostsfactor} et \ref{fig-2nd-ghostsfactor}. Dans ce cas, selon les noyaux, on peut trouver le facteur de \textit{padding} adéquat pour satisfaire le critère.  
 
 
-Consultons alors la table \ref{tab-scoeff-bsplinecardapprox} où sont recueillies des données chiffrées permettant de comparer les différents noyaux. On se rend compte,  qu'il est nécessaire d'au moins faire un \textit{padding} $\times 2$, et d'utiliser des \textbf{noyaux "quintiques"} pour un padding de $\times 4$ au lieu du noyau cubique, ce qui constitue la principale conclusion de \cite{2014PASP..126..287B}. Cependant, le noyau préconisé était celui noté $K_5^{bg}$ (Eq.~\ref{eq:quinticBG-kernel}). Ce que l'on constate, c'est que \textbf{le noyaux $K_5^{je}$ }(Eq.~\ref{eq:quinticJE-kernel}) \textbf{obtient des scores environ deux fois meilleurs}, ce qui est nouveau.
+Consultons alors la table \ref{tab-scoeff-bsplinecardapprox} où sont recueillies des données chiffrées permettant de comparer les différents noyaux. On se rend compte,  qu'il est nécessaire d'au moins faire un \textit{padding} $\times 2$, et d'utiliser des \textbf{noyaux "quintiques"} pour un padding de $\times 4$ au lieu du noyau cubique, ce qui constitue la principale conclusion de \cite{2014PASP..126..287B}. Cependant, le noyau préconisé était celui noté $K_5^{bg}$ (Eq.~\ref{eq:quinticBG-kernel}). Ce que l'on constate, c'est que \textbf{le noyaux $K_5^{je}$ }(Eq.~\ref{eq:quinticJE-kernel}) \textbf{obtient des scores environ deux fois meilleurs}. Cette amélioration pourrait servir pour une mise à jour de \texttt{GalSim} et sa version JAX.
 
 \begin{figure}
 \centering
@@ -1182,6 +1184,8 @@ Multiplication par une phase & $\displaystyle \widehat{e^{i\xi x}f(x)}(\omega)$ 
 \newpage
 \section{Script Mathematica pour les noyaux MZV}
 \label{sec:MathMZV}
+Ci-dessous le code Mathematica pour générer la famille de noyaux dépendant d'un paramètre (noté "c"). Les valeurs de $m$ sont $2$, et $3$, pour les noyaux $K^{mzv}_3$ (cubique), $K^{mzv}_5$ (quintique) exposés dans la section \ref{sec:MZVkernels}.
+
 \begin{lstlisting}[language=iPython]
 FilterP[m_] := 
  Module[{a, n, condp, condn, cond, polyp, polyn, poly, h, L, vars, 
@@ -1214,8 +1218,65 @@ FilterP[m_] :=
     Limit[h[x, l], x -> i, Direction -> -1], {l, 0, L}, {i, 0, m}];
   eqs = Flatten@{eq1, eq2, eq3, Subscript[a, n, m - 1] == c};
   (* Solve *)
-  sol = FullSimplify@Solve[eqs, vars];
+  sol = FullSimplify@Solve[eqs, vars, MaxExtraConditions -> All];
   h[#] /. sol[[1]] /. #1->x
+  ]
+\end{lstlisting}
+\section{Script Mathematica pour les noyaux BG}
+\label{sec:MathBG}
+Ci-dessous le code Mathematica pour générer le noyau cubique ($m=2$), la famille de noyaux quintiques  dépendant d'un paramètre ($m=3$) ainsi qu'un noyau septique ($m=4$). Dans le cas de la famille de noyaux quintiques, le code fournit une solution dépendant d'un paramètre. Il est possible de faire un changement de variable en faveur de $a_{2,0}$, dans ce cas les solutions de $K_5^{bg}$ et $K_5^{je}$ exposés à la section \ref{sec:BGKernels}.
+
+\begin{lstlisting}[language=iPython]
+FilterP[m_] := 
+ Module[{n, condp, condn, cond, polyp, polyn, poly, h, hat, vars, L, 
+   eq1, eq2, eq3, eq3b, eq4, eq5, eq5b, eqs, sol},
+   (* ordre du polynome *)
+  n = If[m <= 1, Return["Warning: need m>1"], 2 m - 1];
+  (* intervalles *)
+  condp[x_] := Table[i <= x < i + 1, {i, 0, m - 1}];
+  condn[x_] := Table[i < x <= i + 1, {i, -m, -1}];
+  cond[x_] := Join[condn[x], condp[x]];
+   (* polynomes par intervalles *)
+  polyp[x_] := 
+   Table[Sum[Subscript[a, j, i] x^j, {j, 0, n}], {i, 0, m - 1}];
+  polyn[x_] := 
+   Table[Sum[Subscript[a, j, -i] (-x)^j, {j, 0, n}], {i, -m + 1, 0}];
+  poly[x_] := Join[polyn[x], polyp[x]];
+  (* TF *)
+  hat[u_] := 
+   Evaluate@
+    FourierCosTransform[h[x], x, u, 
+     FourierParameters -> {0, -2 Pi}]; (* le filtre par morceaux  *)
+  h[x_] := 
+   Evaluate@
+    Piecewise[Table[{poly[x][[i]], cond[x][[i]]}, {i, 1, 2 m}], 0];
+  (* derivee *)
+  h[x_, l_] := D[h[x], {x, l}];
+  hat[u_, l_] := D[hat[u], {u, l}];
+  (* aji variables *)
+  vars = Flatten@Table[Subscript[a, j, i], {i, 0, m - 1}, {j, 0, n}];
+  (* contraintes espace reel *)
+  eq1 = {h[0] == 1};
+  eq2 = Table[h[i] == 0, {i, 1, m - 1}];
+  (* continuity
+  in fact for x=0 the continuity leads to unconstraint for l=even, 
+  and  Subscript[a, l,0]=0 for l:odd
+  *)
+  L = n - 4;
+  eq3 = Table[
+    Limit[h[x, l], x -> i, Direction -> 1] == 
+     Limit[h[x, l], x -> i, Direction -> -1], {l, 0, L}, {i, 1, m}];
+  eq3b = Table[Subscript[a, l, 0] == 0, {l, 1, m - 1, 2}];
+  (* contraintes esapce de Fourier *)
+  eq4 = {Limit[hat[u], u -> 0, Direction -> 1] == 1};
+  eq5 = Table[SeriesCoefficient[hat[u], {u, 0, l}] == 0, {l, 2, n, 2}];
+  eq5b = 
+   Table[Evaluate@Limit[hat[u, l], u -> 1] == 0, {l, 0, n - 1}]; (* 
+  Ok Gary Subscript[a, 1,2]->-1695/20 or make a20->0 *)
+  (* Solve *)
+  eqs = Flatten@{eq1, eq2, eq3, eq3b, eq4, eq5, eq5b};
+  sol = Solve[eqs, vars, MaxExtraConditions -> All];
+  {FullSimplify[sol], h[x]}
   ]
 \end{lstlisting}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
