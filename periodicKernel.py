@@ -31,6 +31,25 @@ lanczos3Wrapped = partial(lanczosWrapped,m=3)
 lanczos5Wrapped = partial(lanczosWrapped,m=5)
 
 ###
+# Approx using the Lanczos-m (renormalized) kernel
+###
+def lanczosRenorm_p(x,m,N):
+  x = np.abs(x)
+  th=m/N
+  return np.piecewise(x, [x<th,x>=th],[lambda x: lanczos_norm(N*x,m)/lanczos_norm(x,m), lambda x:0])
+
+def rlanczosRenormWrapped(u,N,m=3):
+    return np.sign(0.5-np.floor(u+0.5)%2) * lanczosRenorm_p(u-np.floor(u+0.5),m,N)
+
+def lanczosRenormWrapped(u,N,m=3):
+    return np.exp(1j * np.pi * u) * rlanczosRenormWrapped(u,N,m)
+
+lanczosRenorm3Wrapped = partial(lanczosRenormWrapped,m=3)
+lanczosRenorm5Wrapped = partial(lanczosRenormWrapped,m=5)
+
+
+
+###
 # Approx using the Cubic kernel
 ###
 def cubic_p(x,N):
