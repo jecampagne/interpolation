@@ -280,7 +280,7 @@
 \graphicspath{{figures/}}
 
 
-\title{Quelques noyaux interpolateurs pour des opérations sur des images}
+\title{Interpolation 2D dans l'espace de Fourier \\ \small remplacement du sinus cardial périodique}
 \author{Jean-Eric Campagne}
 \date{\today}
 
@@ -297,7 +297,9 @@
 La manipulation des images à des fins scientifiques  en astro est une opération courante. C'est un euphémisme de dire que ce n'est pas le seul champ disciplinaire qui transforme des images, le dernier en date étant peut-être  celui des réseaux sociaux comme Facebook, X (ex. Tweeter), Instagram, TikTok, etc. D'ailleurs, cela devient un problème majeur dans le cadre de la désinformation. Ceci dit, revenons aux images du Ciel avec des étoiles, des galaxies et autres objets d'études. Nous savons qu'elles sont pixelisées, c'est-à-dire qu'elles représentent une version échantillonnée sur une grille 2D (régulièrement espacée par hypothèse) d'une fonction continue plus ou moins régulière. Cependant, dans bien des cas, il nous faut obtenir à partir de cette version pixelisée, non seulement une version continue, mais le plus souvent dans l'espace de Fourier. On peut penser en effet, à l'extraction de Point Spread Function (PSF) afin d'obtenir la "vraie" image du Ciel \citep{2011ASPC..442..435B}, à la préparation de lots d'images de référence au format identique, par exemple utilisés pour 
 l'apprentissage de réseaux convolutionnels appliqués à la détermination de redshifts photométriques \citep{2019A&A...621A..26P}, qui nécessite des opérations de ré-échantillonnages, co-additions etc. Ces applications ont tout particulièrement été mises à disposition des astronomes dans une suite de logiciels mis en oeuvre par E. Bertin et collaborateurs depuis environ 25 ans comme \textsf{SExtractor} \citep{1996A&AS..117..393B} et  le pipeline \textsf{TERAPIX} \citep{2002ASPC..281..228B}. Il y a aussi des usage à des fins de simulations réalistes de nouveaux surveys où l'on intègre par exemple des effets de nouvelles PSF et autres artefacts instrumentaux, tout comme des effets de lentillages gravitationnels à des fins de préparations aux analyses comme par exemple le lentillage faible (Weak Lensing) particulièrement sensible à la morphologie des galaxies. Un tel software de simulation est par exemple \textsf{GalSim} \citep{2015A&C....10..121R}.
 
-La représentation continue d'une image pixelisée se fait par l'intermédiaire d'un noyau interpolateur. Si l'on pense à des noyaux dans l'espace réel, le point qui va nous occuper, c'est que nous avons également besoin d'un interpolateur dans le domaine de Fourier, et qu'il nous faut pouvoir faire les opérations à un coût en termes de temps de calcul le plus faible possible, tout en respectant une précision nécessaire afin de ne pas obérer l'usage en cosmologie du WL par exemple. Dans ce cadre, je rappellerai le théorème fondamental de  Whittaker-Nyquist-Shannon qui est certes parfait sous certaines conditions mais qui n'est pas praticable en l'état, pour faire court \textit{il nous faut des approximations du sinus cardinal}. Je vais m'inspirer de l'article \cite{2014PASP..126..287B} qui a été le point de départ de ma réflexion. 
+La représentation continue d'une image pixelisée se fait par l'intermédiaire d'un noyau interpolateur. Si l'on pense à des noyaux dans l'espace réel, le point qui va nous occuper, c'est que nous avons également besoin d'un interpolateur dans le domaine de Fourier, et qu'il nous faut pouvoir faire les opérations à un coût en termes de temps de calcul le plus faible possible, tout en respectant une précision nécessaire afin de ne pas obérer l'usage en cosmologie du WL par exemple. 
+
+Je vais m'inspirer de l'article \cite{2014PASP..126..287B} qui a été le point de départ de ma réflexion. Après avoir fixer quelques définitions (Sec.~\ref{sec:Def}), je vais un peut développer le théorème d'échantillonnage (Whittaker-Nyquist-Shannon) mettant en évidence le rôle central du \textit{sinus cardinal} comme noyau convolutif. L'échantillonnage de taille fini est développé dans la section \ref{sec:interpFinite} au cours de laquelle est mis en évidence le \textit{sinus cardinal périodique}  lors de l'échantillonnage dans l'espace de Fourier. La taille du support de ce noyau convolutif est l'élément dominant d'un calcul typique comme il sera montré. Donc, il nous faut trouver des noyaux de taille plus petite tout en préservant la précision. Les qualités requises sont introduites dans la section \ref{sec:kernel-freq0}. Ensuite la section \ref{sec:kernel-for-sinuscard-period} aurait pu faire l'objet d'une note à part entière mais je l'ai laissée par soucis de cohérence. Elle détaille les caractéristiques des noyaux de C. Lanczos, des noyaux constitués de formes polynomiales par morceaux. Parmi ces derniers, il y a le noyaux d'ordre 5 (quintique) élaboré par les auteurs de \cite{2014PASP..126..287B}. Je montre comment je suis venu à élaborer une version un peu plus performante. Pour illustrer les effets de ces noyaux sensés approximer \textit{le sinus cardinal périodique} dans l'espace de Fourier, la section \ref{sec:cas-etude} présente deux cas d'études. Est discutée l'apparition d'images fantômes,  avec en particulier leurs impacts quand on opère une transformation de type \textit{shear}. 
 %
 \section{Quelques notations et définitions}
 \label{sec:Def}
@@ -341,7 +343,7 @@ f(x) = \sum_{j=-\infty}^{\infty} f(j)\ \sinc(x-j) \quad \mathrm{avec} \quad
 \end{equation}
 \label{th:sampling}
 \end{thm}
-\textit{\small Remarquons que  si l'on change l'échelle dans l'espace réel telle que l'échantillonnage de $f$ se fait à la fréquence $\nu_e=1/T_e$ (on recueille les échantillons $f(i T_e)$), alors la condition du théorème fixe le spectre de Fourier à devoir être contenu dans l'intervalle $[-\nu_e/2,\nu_e/2]$. C'est-à-dire que la fréquence d'échantillonnage et la fréquence maximale du spectre Fourier $\nu_{max}$ doivent satisfaire la condition de Nyquist, $\nu_e \geq 2\nu_{max}$, bien connue de toutes les personnes qui opèrent dans le domaine du traitement de signal.
+\textit{\small Remarquons que  si l'on change l'échelle dans l'espace réel telle que l'échantillonnage de $f$ se fait à la fréquence $\nu_e=1/T_e$ (on recueille les échantillons $f(i T_e)$), alors la condition du théorème fixe le spectre de Fourier à devoir être contenu dans l'intervalle $[-\nu_e/2,\nu_e/2]$. C'est-à-dire que la fréquence d'échantillonnage et la fréquence maximale du spectre Fourier $\nu_{max}$ doivent satisfaire la condition de Nyquist\footnote{Résultat important dans le domaine du traitement de signal.}, $\nu_e \geq 2\nu_{max}$.
 }
 
 Il est intéressant de brosser une démonstration de ce théorème emblématique. Si l'on définit la "fonction" $f_d$ comme à la section précédente mais cette fois selon
@@ -387,7 +389,7 @@ f(x) & = (f_d \ast \hat{\boxcar})(x) = (f_d \ast \sinc)(x) = \int f_d(y)\sinc(y-
 \end{align}
 ce qui constitue le résultat du théorème.
 
-Durant cette démonstration, on a introduit les distributions au sens de Schwartz $\delta$, $\comb$ et des fonctions $\boxcar$, $\sinc$ qui vont nous servir par la suite. Le théorème en lui-même nous invite à le regarder sous plusieurs angles comme l'interpolation (domaine des mathématiques) et le filtrage (domaine de l'ingénierie). L'article de Shannon est un lien entre les deux visions. 
+Durant cette démonstration, on a introduit les distributions $\delta$, $\comb$ et des fonctions $\boxcar$, $\sinc$ qui vont nous servir par la suite. Le théorème en lui-même nous invite à le regarder sous plusieurs angles comme l'interpolation (domaine des mathématiques) et le filtrage (domaine de l'ingénierie). L'article de Shannon est un lien entre les deux visions. 
 
 Coté interpolation, si l'on définit l'ensemble des fonctions d'énergie finie à spectre de Fourier borné, ex:
 \begin{equation}
@@ -396,6 +398,7 @@ V = \left\{ f \in L_2(\mathbb{R})\ tq.\ \mathrm{Support}\ f \subset [-1/2,1/2]\r
 alors la famille $\{\phi_n(x)=\sinc(x-n)\}_{n\in\mathbb{Z}}$ est une base orthogonale de $V$. En effet, toutes sont membres de $V$ et le produit scalaire entre deux membres $\phi_n$ et $\phi_m$ donne par la formule de Plancherel $\delta(m-n)$. Or, l'approximation optimale linéaire\footnote{nb. on entend par là que l'approximation d'une combinaison linéaire de $f$ et $g$, est la même combinaison linéaire des approximations de $f$ et de $g$ calculées séparément.} de $f$ dans l'espace $V$ est la projection orthogonale: 
 \begin{equation}
 P_V[f](x) =  \sum_{j=-\infty}^{\infty} \langle f, \phi_n\rangle \phi_n(x)
+\label{eq:PV-infini}
 \end{equation}
 Le produit scalaire se calcule aisément en se référant à la table \ref{tag-2020-TFconv}:
 \begin{align}
@@ -408,9 +411,9 @@ Or, c'est là où l'on mesure l'impact de la condition du théorème, si le spec
 \end{equation} 
 et l'on retrouve la formule du théorème. On peut étendre ce raisonnement de projection orthogonale sur d'autres types d'ensembles afin d'obtenir des approximations de $f$. C'est entres autres le sujet par exemple du Cours de 2021 de S. Mallat \citep{JECMallat21}.  
 
-Coté filtrage, Le sinus cardinal est un filtre passe-bas idéal. On sait que réaliser ce filtre en pratique n'est pas possible, et toute imperfection donne lieu à des artéfacts de reconstruction comme le phénomène de Gibbs. De plus en pratique également la fréquence d'échantillonnage n'est pas forcément suffisamment grande pour dépasser la fréquence maximale du spectre de Fourier, et il faut donc procéder également à un pré-filtrage du signal afin de ne pas être soumis au phénomène d'aliasing.
+Coté filtrage, le sinus cardinal est un filtre passe-bas idéal. Cependant, en pratique, la fréquence d'échantillonnage n'est pas forcément suffisamment grande pour dépasser la fréquence maximale du spectre de Fourier, il faut alors procéder à un pré-filtrage du signal afin de ne pas être soumis au phénomène d'\textit{aliasing}. De plus, on sait que  toute troncature de la série infinie Eq.~\ref{eq:PV-infini} donne lieu  au \textit{phénomène de Gibbs}. 
 
-Ce qu'on peut retenir de ces considérations est que $\sinc$ est un interpolateur correspondant au filtre idéal passe-bas, et qu'il est la brique élémentaire pour constituer une base orthogonale de l'ensemble des fonctions de spectre de Fourier limité. Si l'on veut obtenir une approximation différente, cela revient à définir un nouvel ensemble d'approximation, avec une nouvelle base orthogonale, et une nouvelle brique élémentaire (noyau interpolateur). Ces noyaux peuvent par exemple prendre la forme d'approximation à support compact de $\sinc$ dans l'espace réel ou de $\boxcar$ dans l'espace de Fourier, voir même combiner des propriétés de régularité dans les deux espaces. Avant d'envisager de tels interpolateurs nous allons creuser un peu plus les relations entre $f_d$ et $F$ introduites dans la section précédente. Avant faisons une extension simple mais pratique du théorème d'échantillonnage en dimension supérieure à 1.
+Ce qu'on peut retenir de ces considérations est que $\sinc$ est un interpolateur correspondant au filtre idéal passe-bas, et qu'il est la brique élémentaire pour constituer une base orthogonale de l'ensemble des fonctions de spectre de Fourier limité. Utiliser une approximation du sinus cardinal peut poser problème. Ces approximations peuvent être vues comme des "noyaux" convolutifs et/ou des filtres en Fourier. Ces noyaux peuvent prendre la forme d'approximation à support compact de $\sinc$ dans l'espace réel ou de $\boxcar$ dans l'espace de Fourier, voir même combiner des propriétés de régularité dans les deux espaces. Avant d'envisager de tels interpolateurs, nous allons creuser un peu plus les relations entre $f_d$ et $F$ introduites dans la section précédente.  Cependant, procédons tout d'abord à une extension simple mais pratique du théorème d'échantillonnage en dimension supérieure à 1.
 %
 \section{Le cas 2D pour les images}
 \label{sec:2D}
@@ -419,9 +422,9 @@ Le cas 2D à grille régulière est une généralisation simple du cas 1D car il
 \begin{equation}
 f(x) = \sum_{j\in\mathbb{Z}^2} f(j)\ \sinc(x-j)
 \end{equation}
-avec
+avec $x=(x_1,x_2)$
 \begin{equation}
-\sinc(x)\equiv \sinc(x_1,x_2) = \sinc(x_1)\sinc(x_2)
+\sinc(x)\equiv \sinc(x_1)\sinc(x_2)
 \end{equation}
 On a donc un interpolateur idéal $\sinc(x)$ qui est le produit cartésien des interpolateurs idéaux sur chacune des dimensions, $\sinc(x_i)$ $i=1,2$. Concernant les relations/définitions données dans la section \ref{sec:Def}, on utilise par la suite des interpolateurs de type \textit{produit cartésien} d'interpolateurs 1D. On parle par exemple d'interpolateur  bi-linéaire, bi-cubique utilisant des interpolateurs linéaires, cubiques, etc. 
 %
@@ -431,6 +434,7 @@ On a donc un interpolateur idéal $\sinc(x)$ qui est le produit cartésien des i
 Nous avons motivé dans l'introduction de pouvoir obtenir des expressions dans l'espace de Fourier. Et nous avons affaire à des fonctions dont on ne connait que $N$ échantillons. De l'expression de $F(x)$ (Eq.~\ref{eq:Freal}), on en déduit que
 \begin{equation}
 \hat{F}(u) = \hat{f_d}(u)\ \hat{K_x}(u)
+\label{eq:hatFu-1}
 \end{equation}
 Or, 
 \begin{align}
@@ -469,9 +473,9 @@ Maintenant, faisons un peu de comptabilité pour estimer les besoins afin d'obte
 \end{enumerate}
 Si on veut terminer la chaîne d'analyse en revenant dans l'espace réel, il nous faut ajouter une DFT inverse qui nécessite $O(M^2\log M)$ opérations. Notons que l'on pourrait également rajouter d'autres tâches pour tenir compte de PSF différentes entre l'image d'origine et l'image finale, et de toutes les transformations (linéaires ou pas) dans l'espace de Fourier pour tenir compte des effets de cisaillement gravitationnel, et autres opérations/transformations géométriques (astronométriques) pour par exemple permettre une co-addition d'images. Cependant, le point critique est le second de la liste ci-dessus.
 
-Si, l'on dispose d'un noyau/interpolant de taille fini qui ne nécessite que $n\leq N$ points en 1D ($n^2$ en 2D) pour remplacer $\D_N$ alors $O(M^2N^2)$ se réduit à $O(n^2 M^2)$, on y gagnerait grandement. Le point délicat est comme nous l'avons déjà mentionné, tout approximation de l'interpolateur idéal $\sinc$ dans l'espace réel, ou du noyau $\D_N$ utilisé dans l'espace de Fourier, se paye par des artéfacts qu'il faut pouvoir maitriser. Il nous faut donc des conditions de régularités dans l'espace réel et l'espace de Fourier. 
+Si, l'on dispose d'un noyau/interpolant de taille fini qui ne nécessite que $n\leq N$ points en 1D ($n^2$ en 2D) pour remplacer $\D_N$ alors un calcul $O(M^2N^2)$ se réduit à  un calcul $O(n^2 M^2)$, c'est-à-dire qu'on y gagnerait grandement. Le point délicat est comme nous l'avons déjà mentionné, toute approximation de l'interpolateur idéal $\sinc$ dans l'espace réel pour un nombre infini d'échantillons, se paye par des artéfacts qu'il faut pouvoir maitriser.  Le même type de précaution doit être envisagée concernant la version repliée $\D_N$ utilisée dans l'espace de Fourier dans le cas d'un nombre fini ($N$) d'échantillons. Il nous faut donc des conditions de régularités dans l'espace réel et l'espace de Fourier. 
 %
-\section{Le remplacement du noyau $\D_N$ dans l'espace de Fourier}
+\section{Le remplacement du noyau 'idéal' dans l'espace de Fourier}
 \label{sec:DNapprox}
 %
 Comme nous l'avons motivé dans l'introduction, il nous faut dans un premier temps nous focaliser sur l'espace de Fourier. Et comme nous l'avons examiné dans la section précédente, il nous faut obtenir un noyau $K_u$ de taille bien inférieure à $N$, le nombre d'échantillons (1D) de la grille d'origine, qui remplacera le noyau $\D_N$ dans l'équation \ref{eq:hatfdfini} dans le calcul de $\hat{f_d}(u)$. Mais quel est le prix à payer d'utiliser $K_u$ en lieu et place de $\D_N$ qui est le noyau parfait/idéal dans cette opération?
@@ -526,7 +530,7 @@ H(x) &=  \sum_{j=-\infty}^\infty \int  \hat{K}(u)\ \delta(u-(\nu+j))\ e^{2\pi i 
 \end{align}
 C'est bien ce que l'on voulait démontrer. Notons au passage que si $\nu\in [-1/2,1/2]$, on vérifie que $K(x)=\sinc(x)$ est bien l'interpolateur idéal car $\hat{K}(\nu+j)=\boxcar(\nu+j)$ est non nul que ssi $j=0$, ce qui donne $H(x)=h(x)$. En quelque sorte la somme ci-dessus, est une estimation de l'erreur que l'on effectue si on utilise un interpolateur imparfait, d'où la définition de $E(\nu,x)$. Refermons la parenthèse.
 
-Revenons à l'équation \ref{eq:Su1}, si l'on pose $\nu=n/N$ et $x=-Nu$ alors $h(x)=e^{2\pi i \nu x}=\hat{f_d}(u)$, ainsi fonction d'erreur  $E(\nu,x)$, est égale à 
+Revenons à l'équation \ref{eq:Su1}, si l'on pose $\nu=n/N$ et $x=-Nu$ alors $h(x)=e^{2\pi i \nu x}=\hat{f_d}(u)$, ainsi la fonction d'erreur  $E(\nu,x)$ est égale à 
 \begin{align}
 E &= \sum_{j=-\infty}^\infty e^{-2\pi i j (-uN)} \widehat{K_u}(n/N-j) \nn\\
 &=\widehat{K_u}(n/N)  + \sum_{j\neq 0} \widehat{K_u}(j+n/N) e^{-2\pi i j N u}
@@ -607,16 +611,18 @@ On note alors qu'un noyau auquel on procède à la renormalisation par $E(0,x)$ 
 Maintenant,  $\widehat{\tilde{K}_x}(u)$ mélange des composantes des  bandes latérales à celles de la bande principale $[-1/2,1/2]$. Plus le coefficient $\hat{K_x}(1)$ est faible plus le mélange est faible. Nous verrons en quoi cela concerne la famille de noyaux de Lanczos et n'affecte pas les autres familles que nous envisageons dans la section suivante.
 %
 \section{Noyaux pour remplacer le sinus cardinal}
+\label{sec:kernel-for-sinuscard-period}
 %
 
-\textit{avertissement: cette section est un peu longue et aurait pu faire par elle-même une note en soi. Je la garde ici par soucis de cohérence. Dans un premier temps, vous pouvez directement aller au "Bilan" (Sec.~\ref{sec:bilan-interpol}).  
+\textit{Avertissement: cette section est un peu longue et aurait pu faire par elle-même une note en soi. Je la garde ici par soucis de cohérence. Dans un premier temps, vous pouvez directement aller au "Bilan" (Sec.~\ref{sec:bilan-interpol}).  
 }
 
-Je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Je ne considère pas les noyaux non séparables comme ceux développés par les auteurs de l'article \citep{Shi2006ImageIB}. Pour une "revue", il peut être intéressant de lire \cite{Parsania2016}. Je vais donc plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} \citep{2011ASPC..442..435B} et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris les noyaux de type B-Spline et B-Spline \textit{cardinal}, qui sont souvent utilisés dans bien des applications mais qui pour celle qui nous occupe s'avèreront inadaptés.
+Je vais passer en revu des noyaux d'interpolation sans pour autant faire une liste exhaustive. Nous allons nous focaliser sur des noyaux en dimension 1, puisque l'extension aux images se fera par produit cartésien (Sec.~\ref{sec:2D}). Je ne considérerai pas pour autant les noyaux de la référence \citep{HU200646} qui utilise des approximations du noyau idéal par fraction continue. Je ne considère pas les noyaux non séparables comme ceux développés par les auteurs de l'article \citep{Shi2006ImageIB}. Pour une "revue", il peut être intéressant de lire \cite{Parsania2016}. Je vais donc plutôt me concentrer sur des noyaux utilisés dans le cadre des librairies pour l'astro comme \textsf{TERAPIX}  et \textsf{SExtractor} \citep{2011ASPC..442..435B} et \textsf{GalSim} \citep{2015A&C....10..121R}. Cependant, je décris les noyaux de type B-Spline et B-Spline \textit{cardinal}, qui sont souvent utilisés dans bien des applications mais qui pour celles qui nous occupent, s'avèreront inadaptés.
 %
 \subsection{Noyaux de C. Lanczos}
+\label{sec:Lanczos}
 %
-Commençons par la famille des interpolateurs de Cornelius Lanczos (1906-74) \footnote{Son nom a différentes écritures, je prends celle d'un de ces articles. C'est mathématicien et physicien d'origine hongroise qui a fait des contributions dans ces deux domaines. Il est remarquable que sous la direction de Lipót Fejér, il écrit sa thèse en 1921 "\textit{The functional theoretical relationships of the homogeneous Maxwell equations}" dédiée à Albert Einstein and Max Planck: “\textit{Dedicated to Albert Einstein and Max Planck, the two great standard-bearers of constructive speculation}" \citep{lanczos2004relations}.}utilisés par exemple dans les logiciels: \textsf{SWarp} de la suite \textsf{TERAPIX} \citep{2002ASPC..281..228B}, \textsf{PSFEx} de la suite \textsf{SExtractor} \citep{1996A&AS..117..393B, 2011ASPC..442..435B} et son extension récente \textsf{SourceXtractor++} \citep{2022arXiv221202428K}.
+Commençons par la famille des interpolateurs de Cornelius Lanczos (1906-74) \footnote{Son nom a différentes écritures, je prends celle d'un de ces articles. C'est un mathématicien et physicien d'origine hongroise qui a fait des contributions dans ces deux domaines. Il est remarquable que sous la direction de Lipót Fejér, il écrit sa thèse en 1921 "\textit{The functional theoretical relationships of the homogeneous Maxwell equations}" dédiée à Albert Einstein and Max Planck: “\textit{Dedicated to Albert Einstein and Max Planck, the two great standard-bearers of constructive speculation}" \citep{lanczos2004relations}.} utilisés par exemple dans les logiciels: \textsf{SWarp} de la suite \textsf{TERAPIX} \citep{2002ASPC..281..228B}, \textsf{PSFEx} de la suite \textsf{SExtractor} \citep{1996A&AS..117..393B, 2011ASPC..442..435B} et son extension récente \textsf{SourceXtractor++} \citep{2022arXiv221202428K}.
 
 L'idée de C. Lanczos était de régulariser les séries partielles de Fourier qui sont sujettes au phénomène de Gibbs. C'est une famille de noyaux définis par\footnote{Nb. Il y a des erreurs dans l'appendice de l'article \cite{2014PASP..126..287B} qui ont été corrigés dans le code de \textsf{GalSim}.}  
 \begin{align}
@@ -663,7 +669,7 @@ Cependant $\hat{L}_m(0)\neq 1$ comme par exemple les valeurs pour $m=3,4,5,6$ do
 \begin{equation}
 \int_{-\infty}^\infty L_m(x)\ dx \neq 1
 \end{equation}
-De même, on peut constater que $\hat{L}_m(j\neq0)\neq 0$ sur la figure \ref{fig-Lanczos-hat-j}. Ce qui a pour conséquence que le noyau de Lanczos ne partitionne pas l'unité. Il nous faut procéder à un ajustement décrit dans la section \ref{sec:kernel-freq0}. Comme $\hat{L}_m(1)\gg \hat{L}_m(j>1)$ la correction d'ordre 1 ses formules \ref{eq:kernel-rescaling} suffit à ce stade. L'effet est bien visible sur la figure \ref{fig-Lanczos-renorm-closure}. La déviation maximale de la fonction $U(x)$ (Prop.~\ref{prop:unite})  par rapport à 1, une fois le noyau normalisé est par exemple respectivement de $2\ 10^{-4}$ et $4\ 10^{-5}$ pour $m=3,5$. J'utilise par la suite cette forme renormalisée des noyaux de Lanczos dont les graphes sont donnés sur la figure \ref{fig-Lanczos-norm-kernel}. 
+De même, on peut constater que $\hat{L}_m(j\neq0)\neq 0$ sur la figure \ref{fig-Lanczos-hat-j}. Ce qui a pour conséquence que le noyau de Lanczos ne partitionne pas l'unité. Il nous faut procéder à un ajustement décrit dans la section \ref{sec:kernel-freq0}. Comme $\hat{L}_m(1)\gg \hat{L}_m(j>1)$ la correction d'ordre 1 de ces formules \ref{eq:kernel-rescaling} suffit à ce stade. L'effet est bien visible sur la figure \ref{fig-Lanczos-renorm-closure}. La déviation maximale de la fonction $U(x)$ (Prop.~\ref{prop:unite})  par rapport à 1, une fois le noyau normalisé est par exemple respectivement de $2\ 10^{-4}$ et $4\ 10^{-5}$ pour $m=3,5$. J'utilise par la suite cette forme renormalisée des noyaux de Lanczos dont les graphes sont donnés sur la figure \ref{fig-Lanczos-norm-kernel}. 
 
 Finalement, un polynôme échantillonné ne peut être interpolé exactement par un noyau de Lanczos (même renormalisé), il n'a pas été construit dans ce but. Dans la suite, nous allons étudier des noyaux  qui ont cette propriété.
 %
@@ -789,7 +795,7 @@ Ainsi, les choix $c=(-1/2,3/64)$ permettent non seulement de contrôler les $\wi
 \subsubsection{Famille de noyaux "BG" dont une variante quintique}
 \label{sec:BGKernels}
 % 
-\cite{2014PASP..126..287B} proposent dans leur articles non pas une famille en tant que telle, car ils se focalisent sur un noyau quintique, mais on peut retrouver dans un même schéma, le noyau cubique de $K^{mzv}_3(x)$ autrement appelé le noyau de Catmull-Rom,  la version "BG" de noyau quintique ainsi qu'une variante, elle-même différente de $K^{mzv}_5(x)$.
+\cite{2014PASP..126..287B} proposent dans leur article non pas une famille en tant que telle, car ils se focalisent sur un noyau quintique, mais on peut retrouver dans un même schéma, le noyau cubique de $K^{mzv}_3(x)$ autrement appelé le noyau de Catmull-Rom,  la version "BG" de noyau quintique ainsi qu'une variante, elle-même différente de $K^{mzv}_5(x)$.
 
 Pour cela, on utilise la même définition des noyaux MZV ainsi que les même notations, notamment le paramètre $m$ donne non seulement la taille du support du noyau, et aussi le degré des polynômes $n=2m-1$. Il y a donc $2m^2$ coefficients à déterminer\footnote{Un script Mathematica permet de trouver les solutions pour le noyau cubique, la famille de noyaux quintiques, et pour un noyau spetique non exposé (voir Sec.~\ref{sec:MathBG}).}. Les contraintes imposées sont les suivantes:
 \begin{itemize}
@@ -856,7 +862,7 @@ La figure \ref{fig-quintic-kernels} présente les différents noyaux quintiques:
 %
 \subsubsection{Famille de noyaux : B-spline (cardinale)}
 %
-Les \textit{splines} sont un outil très utilisé (math/ingénierie) que je ne peux le couvrir l'ensemble des applications. Concernant l'interpolation, on les présente souvent dans l'espace réel, afin de concevoir une représentation par exemple cubique par morceaux, entres les noeuds dont on connait la position dans un espace multi-dimensionnel. Concernant la possibilité d'obtenir une base orthogonale, on exploite ce que l'on nomme soit les \textit{box splines} \cite{10.5555/1525499}, soit les \textit{B-splines} et les versions "cardinal" \cite{Unser1993a} que nous allons manipuler.  Dans la suite, je vais me concentrer sur un cas particulier pour comparaison avec les sections précédentes. 
+Les \textit{splines} sont très utilisés (math/ingénierie) et je ne peux ouvrir l'ensemble des applications. Concernant l'interpolation, on les présente souvent dans l'espace réel, afin de concevoir une représentation par exemple cubique par morceaux, entres les noeuds dont on connait la position dans un espace multi-dimensionnel. Concernant la possibilité d'obtenir une base orthogonale, on exploite ce que l'on nomme soit les \textit{box splines} \cite{10.5555/1525499}, soit les \textit{B-splines} et les versions "cardinal" \cite{Unser1993a} que nous allons manipuler.  Dans la suite, je vais me concentrer sur un cas particulier pour comparaison avec les sections précédentes. 
 
 En fait l'idée est la suivante. Dans le domaine de Fourier, l'expression du noyau d'une B-spline est la suivante\footnote{Nb. il peut y avoir différentes formulations non seulement via les conventions de la transformée de Fourier, mais aussi si on considère des B-splines centrées ou non.}
 \begin{equation}
@@ -898,11 +904,11 @@ Le noyau de floutage qui affecte $\beta_3$ est
 \begin{equation}
 b_3(x) = \sum_{j=-1}^1 \beta_3(j)\delta(x-j)
 \end{equation}
-avec $\beta_3(j)=\{1/6,2/3,1/6\}$ pour respectivement $j=\{-1,0,1\}$. La transformée de Fourier inverse fournit la représentant suivante 
+avec $\beta_3(j)=\{1/6,2/3,1/6\}$ pour respectivement $j=\{-1,0,1\}$. La transformée de Fourier inverse fournit la représentation suivante:
 \begin{equation}
 \hat{b}_3(u)= \frac{2}{3} + 2\frac{1}{6}\cos(2\pi u) = 1-\frac{2}{3}\sin(\pi u)^2
 \end{equation}
-La première forme est généralisable (voir Eq. 3.22 de \cite{Unser1993a}) et il n'est pas fortuit de trouver les coefficients $\beta_3(0)$ et $\beta_3(1)$. La seconde forme permet un usage pratique à suivre. Donc, si l'on veut déconvoluer le "flou", il suffit alors de définir 
+La première forme est généralisable (voir Eq. 3.22 de \cite{Unser1993a}) et il n'est pas fortuit de trouver les coefficients $\beta_3(0)$ et $\beta_3(1)$. La seconde forme permet un usage pratique  utilisée ci-dessous. Donc, si l'on veut déconvoluer le "flou", il suffit alors de définir 
 \begin{equation}
 \hat{\gamma}_3(u) = \hat{\beta}_3(u)\times \hat{b}^{-1}_3(u) = \frac{\sinc^4(u)}{1-\frac{2}{3}\sin(\pi u)^2}
 \label{eq:hatgam3}
@@ -966,11 +972,11 @@ Maintenant, le hic avec $\gamma_3(x)$ qui pourrait être utilisé pour remplacer
 %\end{figure}
 Or, nous avons motivé (Sec.~\ref{sec:interpFinite}) le fait de choisir des noyaux dont la taille de support est le plus petit possible (intervenant au carré) moyennant des qualités pour réduire les images fantômes.  On peut tenter de procéder à une approximation qui permettrait de réduire le support de $\gamma_m(x)$. Mais on va tout de même avoir un problème.
 
-On peut se faire une idée du problème se posant la question de trouver les coefficients $s_3(n)$ autrement que la démarche entreprise ci-dessus. Je vais suivre la démarche\footnote{nb. L'article non publié de l'auteur est très pédagogique, tourné pour des applications Web de type Facebook, Instagram même s'il mentionne que ces approximations devrait être revues pour des applications plus demandeuses de précisions. C'est ce que l'on constate d'ailleurs. C'est assez original que l'auteur n'est pas remarqué qu'il (re)construisait les B-Splines, et que ses "Magic Kernel(s) Sharp" sont les B-Splines cardinal.} de \cite{Costella2021} en adaptant les notations. En fait, rappelons que pour la version "cardinale" $\gamma_3(n)=0$ pour $|n|\geq 1$ et que cela est généralisable pour d'autres valeurs de $m$. Une approximation d'ordre $o$ consiste alors à requérir que $\gamma^{(o)}_3(n)=0$ pour $1\leq n\leq o$. Dans la suite on se limite aux  B-Splines tels que $\beta_m(n\geq 3)=0$. Les coefficients $S^=\{s_m(n)\}_{1\geq n}$ (sachant que $s_m(-n)=s_m(n)$ et $\sum_{n=-\infty}^\infty s_m(n)=1$ ce qui donne $s_m(0)$) sont alors solutions d'un système linéaire de la forme (indexation commençant à 1) est la suivante
+On peut se faire une idée du problème, en se posant la question de trouver les coefficients $s_3(n)$ autrement que la démarche entreprise ci-dessus. Je vais suivre la démarche\footnote{nb. L'article non publié de l'auteur est très pédagogique, tourné pour des applications Web de type Facebook, Instagram même s'il mentionne que ces approximations devrait être revues pour des applications plus demandeuses de précisions. C'est ce que l'on constate d'ailleurs. C'est assez original que l'auteur n'est pas remarqué qu'il (re)construisait les B-Splines, et que ses "Magic Kernel(s) Sharp" sont les B-Splines cardinal.} de \cite{Costella2021} en adaptant les notations. En fait, rappelons que pour la version "cardinale" $\gamma_3(n)=0$ pour $|n|\geq 1$ et que cela est généralisable pour d'autres valeurs de $m$. Une approximation d'ordre $o$ consiste alors à requérir que $\gamma^{(o)}_3(n)=0$ pour $1\leq n\leq o$. Dans la suite on se limite aux  B-Splines tels que $\beta_m(n\geq 3)=0$. Les coefficients $S=\{s_m(n)\}_{1\geq n}$ (sachant que $s_m(-n)=s_m(n)$ et $\sum_{n=-\infty}^\infty s_m(n)=1$ ce qui donne $s_m(0)$) sont alors solutions d'un système linéaire dont la forme (indexation commençant à 1) est la suivante:
 \begin{equation}
 (A+Z-2B^T R)S+B^T = 0
 \end{equation}
- Les matrices se lisent 
+ Les matrices s'écrivent comme suit\footnote{$0_{n,n}$ et $1_{n,n}$ représentent respectivement la matrice nulle et la matrice identité de taille $n\times n$.} 
 \begin{equation}
 A= \begin{bmatrix}
 \beta_0 & \beta_1&\beta_2 & 0 & 0 & 0 & 0 & 0 &\ldots\\
@@ -979,13 +985,13 @@ A= \begin{bmatrix}
 0 & \beta_2 & \beta_1 & \beta_0 & \beta_1&\beta_2 & 0 &0& \ldots\\
 0& 0 & \beta_2 & \beta_1 & \beta_0 & \beta_1&\beta_2 & 0 & \ldots\\
 \vdots & \vdots & \vdots  & \vdots & \vdots &\vdots & \vdots & \ddots
-\end{bmatrix}_{o,o}
+\end{bmatrix}
 \end{equation}
 \begin{equation}
-Z = 0_{o,o}, \qquad Z(1,1)=\beta_2
+Z = 0\ \mathrm{sauf}\  Z(1,1)=\beta_2
 \end{equation}
 \begin{equation}
-B = (\beta_1,\beta_2,0,\ldots)_{1,o}, \quad R=1_{1,o}
+B = (\beta_1,\beta_2,0,\ldots), \quad R=(1,1,\ldots)
 \end{equation}
 La solution d'ordre $o$ tronque les matrices pour n'avoir que $o$ lignes ou colonnes. Cela donne par exemple les solutions disposées dans la table \ref{tab-scoeff-bsplinecardapprox}.
 \begin{table}
@@ -1074,38 +1080,9 @@ Ceci clôt cette section dédiée au B-Splines cardinales qui sont des outils tr
 %    """
 %\end{lstlisting}
 %
-\subsection{Bilan et nécessité du 0-\textit{padding}}
+\subsection{Bilan: 0-\textit{padding} et ordre du noyau}
 \label{sec:bilan-interpol}
 %
-A ce stade, un petit rappel peut s'imposer. Il nous faut trouver une approximation du \textit{sinus cardinal périodique} $D_N$ (Sec.~\ref{sec:interpFinite}, Eq.~\ref{eq:sinc-periodic}) qui agit dans l'espace de Fourier comme interpolateur. Ce noyau "imparfait" noté $K_u$ doit satisfaire deux critères élaborés dans la section \ref{sec:DNapprox}, au travers de la reconstruction d'une fonction élémentaire de type impulsionnelle $f_d(x)=a_n \delta(x-n)$ (Eq.\ref{eq:ghosts}), à savoir pour $u=n/N\in[-1/2, 1/2]$:
-\begin{align}
-E_0(u) &= \sum_{j\neq 0} \widehat{K_u}(j+u)
-\quad \mathrm{et}\quad  \widehat{K_u}(1+u)
-\label{eq:error-funct}
-\end{align}
-doivent être \textit{tous deux le plus petit possible}. Primo, pour reproduire l'image principale, et secundo faire en sorte de diminuer les images fantômes dominantes (cf. celles du premier ordre). La figure \ref{fig-E0-et-ghostsfactor} donne l'allure de ces deux fonctions d'erreur pour des noyaux étudiés dans cette section. 
-Juste pour montrer que les images fantômes d'ordres supérieures sont bien plus faibles, la fonction $\widehat{K_u}(2+u)$ est montrée sur la figure \ref{fig-2nd-ghostsfactor}.
-
-On remarque immédiatement (Fig.~\ref{fig-E0-et-ghostsfactor}) que le critère d'obtenir des erreurs inférieures ou égales à $\pm 1\permil$ sur l'ensemble de la plage $[-1/2, 1/2]$ n'est pas satisfait. Mais, on peut plonger l'image initiale, pour laquelle l'échantillonnage $(a_n)$  se situe dans l'intervalle tel que $n\in\Iintv{-N/2,N/2-1}$ ($u=n/N \in [-1/2,1/2]$), dans une image plus grande constituée de zéros en dehors des $N\times N$ pixels centraux. C'est la procédure de 0-\textit{padding}. On augmente alors $N$ d'un facteur $2$, $4$ ou $6$ ce qui contraint respectivement les valeurs de $u$ telles que $|u|<\{1/4,1/8,1/12\}$. Ce qui est indiqué par les flèches dans les figures  \ref{fig-E0-et-ghostsfactor} et \ref{fig-2nd-ghostsfactor}. Dans ce cas, selon les noyaux, on peut trouver le facteur de \textit{padding} adéquat pour satisfaire le critère.  
-
-
-Consultons alors la table \ref{tab-scoeff-bsplinecardapprox} où sont recueillies des données chiffrées permettant de comparer les différents noyaux. On se rend compte,  qu'il est nécessaire d'au moins faire un \textit{padding} $\times 2$, et d'utiliser des \textbf{noyaux "quintiques"} pour un padding de $\times 4$ au lieu du noyau cubique, ce qui constitue la principale conclusion de \cite{2014PASP..126..287B}. Cependant, le noyau préconisé était celui noté $K_5^{bg}$ (Eq.~\ref{eq:quinticBG-kernel}). Ce que l'on constate, c'est que \textbf{le noyaux $K_5^{je}$ }(Eq.~\ref{eq:quinticJE-kernel}) \textbf{obtient des scores environ deux fois meilleurs}. Cette amélioration pourrait servir pour une mise à jour de \texttt{GalSim} et sa version JAX.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{fig15a.png}
-\includegraphics[width=0.9\textwidth]{fig15b.png}
-\caption{Fonctions $E_0(u)$ et $\widehat{K_u}(1+u)$ pour $u=x/N\in[-1/2,1/2]$ pour des interpolants détaillés dans la section. La zone grisée indique la zone des $\pm 1\permil$.}
-\label{fig-E0-et-ghostsfactor}
-\end{figure}
-%
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{fig16.png}
-\caption{La fonction $\widehat{K_u}(2+u)$ dans las mêmes conditions de la figure \ref{fig-E0-et-ghostsfactor}.}
-\label{fig-2nd-ghostsfactor}
-\end{figure}
-
 \begin{table}
 \small
 \centering
@@ -1126,12 +1103,176 @@ Lanczos-5 & 10    &  $1.08$ & $0.00360$  &  $\mathbf{0.00424}$ & $0.00005$ & $\m
 \label{tab-scoeff-bsplinecardapprox}
 \end{table}
 
+A ce stade, un petit rappel peut s'imposer. Il nous faut trouver une approximation du \textit{sinus cardinal} dans le cas d'une infinité d'échantillons (à la façon du théorème d'échantillonnage Sec.~\ref{sec:interpFinite}) qui agit dans l'espace de Fourier comme interpolateur. Ce noyau "imparfait" noté $K_u$ doit satisfaire deux critères élaborés dans la section \ref{sec:DNapprox}, au travers de la reconstruction d'une fonction élémentaire de type impulsionnelle $f_d(x)=a_n \delta(x-n)$ (Eq.~\ref{eq:ghosts}), à savoir pour $u=n/N\in[-1/2, 1/2]$:
+\begin{align}
+E_0(u) &= \sum_{j\neq 0} \widehat{K_u}(j+u)
+\quad \mathrm{et}\quad  \widehat{K_u}(1+u)
+\label{eq:error-funct}
+\end{align}
+doivent être \textitbf{tous deux en valeur absolue le plus petit possible}. Primo, pour reproduire l'image principale au mieux, et secundo faire en sorte de diminuer les images fantômes dominantes (cf. celles du premier ordre). La figure \ref{fig-E0-et-ghostsfactor} donne l'allure de ces deux fonctions d'erreur pour des noyaux étudiés. 
+Juste pour montrer que les images fantômes d'ordres supérieures sont bien plus faibles, la fonction $\widehat{K_u}(2+u)$ est présentée sur la figure \ref{fig-2nd-ghostsfactor}.
+
+On remarque immédiatement (Fig.~\ref{fig-E0-et-ghostsfactor}) que le critère d'obtenir des erreurs inférieures ou égales à $\pm 1\permil$ sur l'ensemble de la plage $[-1/2, 1/2]$ n'est pas satisfait. Mais, on peut plonger l'image initiale, pour laquelle l'échantillonnage $(a_n)$  se situe dans l'intervalle tel que $n\in\Iintv{-N/2,N/2-1}$ ($u=n/N \in [-1/2,1/2]$), dans une image plus grande constituée de zéros en dehors des $N\times N$ pixels centraux. \textbf{C'est la procédure de 0-\textit{padding}}. On augmente alors $N$ d'un facteur $2$, $4$ ou $6$ ce qui contraint respectivement les valeurs de $u$ telles que $|u|<\{1/4,1/8,1/12\}$. Ce qui est indiqué par les flèches dans les figures  \ref{fig-E0-et-ghostsfactor} et \ref{fig-2nd-ghostsfactor}. Dans ce cas, selon les noyaux, on peut trouver le facteur de \textit{padding} adéquat pour satisfaire le critère.  
 
 
+Consultons alors la table \ref{tab-scoeff-bsplinecardapprox} où sont recueillies des données chiffrées permettant de comparer les différents noyaux. On se rend compte alors:
+\begin{itemize}
+\itemb que le noyau cubique ne peut être utilisé que s'il est associé à un \textit{padding} $\times 6$ au moins,
+\itemb et que l'usage d'un \textit{padding} $\times 4$ permet d'utiliser des \textbf{noyaux "quintiques"}.
+\end{itemize} 
+Ces éléments constituent la principale conclusion de \cite{2014PASP..126..287B}. Cependant, le noyau préconisé était celui noté $K_5^{bg}$ (Eq.~\ref{eq:quinticBG-kernel}). Ce que l'on constate, c'est que \textbf{le noyaux $K_5^{je}$ }(Eq.~\ref{eq:quinticJE-kernel}) \textbf{obtient des scores environ deux fois meilleurs}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{fig15a.png}
+\includegraphics[width=0.9\textwidth]{fig15b.png}
+\caption{Fonctions $E_0(u)$ et $\widehat{K_u}(1+u)$ pour $u=x/N\in[-1/2,1/2]$ pour des interpolants détaillés dans la section. La zone grisée indique la zone des $\pm 1\permil$.}
+\label{fig-E0-et-ghostsfactor}
+\end{figure}
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{fig16.png}
+\caption{La fonction $\widehat{K_u}(2+u)$ dans las mêmes conditions de la figure \ref{fig-E0-et-ghostsfactor}.}
+\label{fig-2nd-ghostsfactor}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{fig17.png}
+\caption{La fonction $\widehat{K_u}(1+u)$ dans las mêmes conditions de la figure \ref{fig-E0-et-ghostsfactor} pour quelques noyaux pour apprécier quels sont ceux pouvant utiliser un \textit{padding} $\times 2$.}
+\label{fig-ghostsfactor-large-support-kernels}
+\end{figure}
+
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{fig18a.png}
+\includegraphics[width=0.8\textwidth]{fig18b.png}
+\caption{Noyaux "périodisés" à la façon du sinus cardinal périodique (Eq.~\ref{eq:sinc-periodic}).}
+\label{fig-periodized-kernels}
+\end{figure}
+%
+
+Notons que l'article se focalise sur des noyaux de petites tailles comme on l'a motivé pour accélérer le calcul de la convolution dans l'espace de Fourier (Sec.~\ref{sec:interpFinite}). Mais, le \textit{padding} $\times 4$ peut être gourmand en mémoire, donc pour certaines applications il serait sans doute judicieux d'utiliser des noyaux de support plus grand afin de se limiter à un \textit{padding} $\times 2$. La figure \ref{fig-ghostsfactor-large-support-kernels} montre qu'il faudrait des noyaux de type Lanczos avec un paramètre $m=10$ (Sec.~\ref{sec:Lanczos}). Ce qui correspond à un noyau de support de longueur $20$ en comparaison d'un support de longueur $6$ pour des noyaux d'ordre 5. Cette augmentation de longueur de support se traduit par un facteur 10 en complexité à mettre en balance au gain d'un facteur 4 en mémoire.
+%
+\subsection{Cas du sinus cardinal \textit{périodique}}
+\label{sec:noyaux-periodises}
+%
+La section précédente concernée le sinus cardinal $\sinc$ dans le cas où le nombre d'échantillons est infini. Si on se penche maintenant sur le  cas d'un nombre fini d'échantillons, nous savons que le  sinus cardinal est remplacé par sa version \textit{périodique} notée $D_N$ (Eq.~\ref{eq:sinc-periodic}). Pour remplacer $D_N$, j'utilise  la prescription suivante:
+\begin{enumerate}
+\item soit $K(x)$ un noyau qui dans l'espace réel est une approximation de $\sinc(x)$, alors dans un premier temps définissons
+\begin{equation}
+K_p(\nu) = \frac{K(N \nu)}{K(\nu)}
+\end{equation}
+dont le support est conditionné par celui du numérateur: si $x\in[-m,m]$ alors $\nu\in[-m/N,m/N]$.
+\item Il nous faut ensuite obtenir une périodicité telle que $K_w(\nu+j) = (-1)^j\  K_p(\nu)$ pour $j\in\mathbb{Z}$ et tel que $\nu\in[-m/N,m/N]$. Remarquons que $m$ et $N$ doivent satisfaire $m/N\leq 1/2$, ce qui est en pratique le cas car $m\ll N$.    
+\item Enfin, pour s'accorder sur la définition de la DFT, il faut introduire le facteur $e^{i \pi \nu}$ (voir Eq.~\ref{eq:sinc-periodic}).
+\end{enumerate}
+La figure \ref{fig-periodized-kernels} donne un exemple de noyaux "périodisés" avec une petite valeur $N=16$ pour illustration.
+%
+\section{Usage d'un noyau (in)adéquat}
+\label{sec:cas-etude}
+%
+\subsection{Images fantômes: cas du noyaux de Lanczos}
+%
+Illustrons à présent l'usage des noyaux de taille limitée dans l'espace de Fourier. Prenons comme image de "galaxie", une image $N_{in}\times N_{in}$ avec $N_{in}=32$  que l'on prolonge  par \textit{0-padding} pour obtenir une image  $N_{pad}\times N_{pad}$, soit si on utilise un $\times 4$ \textit{padding} discuté dans la section précédente, $N_{pad}=128$. Le résultat est présenté dans la figure \ref{fig-128padded-init-image}.
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{fig19.png}
+\caption{Image centrale $32\times 32$ complétée par \textit{0-padding} pour obtenir une image $128\times 128$.}
+\label{fig-128padded-init-image}
+\end{figure}
+
+Considérons que l'on fasse à présent un échantillonnage dans l'espace de Fourier selon une grille $u_k = k \Delta u$ avec $k\in\Iintv{-M/2,M/2-1}$, telle que $\Delta u = (M \Delta x)^{-1}$, $M=512$ et $\Delta x=1$. Ce sont les paramètres pour la figure 2 de la référence \cite{2014PASP..126..287B}. On peut alors calculer $\hat{F}(u_k)$ comme résultat du produit $\hat{K}_x \times \hat{f}_d$ (rappel:  Eq.~\ref{eq:hatFu-1}) avec $K_x$ le noyau de Lanczos ($m=3$) renormalisé (Sec.~\ref{sec:Lanczos}). Pour calculer $\hat{f}_d(u_k)$ on peut alors utiliser différentes versions en lieu et place du noyau $\D_N$ (Eq.~\ref{eq:hatfdfini}).
+
+Par exemple, la figure \ref{fig-FXlarge} compare les images de $F(x)$ dans l'espace réel, obtenues par FFT inverse de $(\hat{F}(u_k))$, où on a utilisé soit le noyau "idéal" (sinus cardinal périodique) (à gauche) soit bien le noyau périodisé à base de Lanczos d'ordre 3 (renormalisé) (à droite). Dans ce dernier cas, les images fantômes sont bien visibles. 
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{fig20a.png}
+\includegraphics[width=0.45\textwidth]{fig20b.png}
+\caption{Image $F(x)$ obtenue si l'on procède dans l'espace de Fourier à la convolution avec le noyau "idéal" (sinus cardinal périodique de l'équation \ref{eq:hatfdfini}), ou bien avec le noyau Lanczos-3 renormalisé  périodisés selon  la section \ref{sec:noyaux-periodises}. La LUT est restreinte à $\pm 0.003$ pour voir les images fantômes. Ici $N_{in}=32$, $N_{pad}=4\times N_{in}=128$ et $M=4\times N_{pad}=512$.}
+\label{fig-FXlarge}
+\end{figure}
+Remarquons que dans le cas de la valeur $M=4\times N_{pad}$, les images fantômes sont situées  à une distance $N_{pad}$ de l'image centrale. Mais la position de ces images fantômes dépend de la relation entre $M$ et $N_{pad}$. Par exemple, si $M=3N_{pad}/2$, on voit les images fantômes se rapprocher de l'image centrale (Fig.~\ref{fig-FXlarge2}). Et si $M=N_{pad}/n$ avec $n$ un entier plus grand ou égal à $1$, alors \textitbf{les images s'additionnent à l'image centrale}. Ce qui dans le cas étudié ici, les images vont \textit{compenser exactement l'erreur} $E_0$ (Eq.~\ref{eq:error-funct} et Eq.~\ref{eq:ghosts}).
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{fig25.png}
+\caption{Conditions identiques à celle de la figure \ref{fig-FXlarge} mais ici $M=3/2 N_{pad}=192$.}
+\label{fig-FXlarge2}
+\end{figure}
+
+Mais cette propriété de compensation de l'erreur sur l'image centrale par les images fantômes, n'est pas générale. En particulier, si on procède par exemple à la transformation suivante sur la grille\footnote{nb. à considérer en 2D: $(u_{1,k_1}, u_{2,k_2})$} $(u_k)_k$: 
+\begin{equation}
+\begin{pmatrix}
+u^\prime_1 \\ u^{\prime}_2 
+\end{pmatrix} = 
+\begin{pmatrix}
+1 & -\gamma \\ \gamma & 1
+\end{pmatrix}
+\begin{pmatrix}
+u_1 \\ u_2 
+\end{pmatrix}
+\label{eq:shear}
+\end{equation}
+Il s'agit d'un effet de \textit{shear} dont l'origine peut être un effet gravitationnel que l'on veut mesurer précisément pour poser des contraintes sur les paramètres cosmologiques. L'effet est alors \textit{dramatique} comme on peut le voir sur la figure \ref{fig-FXlarge3}. La position des images fantômes dépendent de la valeur de $\gamma$ donc repliée sur l'image centrale produit des effets qui obèrent toute tentative de mesurer l'ellipticité de la "galaxie" soumise à la distorsion gravitationnelle.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{fig26.png}
+\caption{Conditions identiques à celle de la figure \ref{fig-FXlarge} mais ici $M= N_{pad}$ et on a appliqué la transformation linéaire de l'équation \ref{eq:shear} pouvant simulé un effet de \textit{shear} ($\gamma=0.1$ pour illustration).}
+\label{fig-FXlarge3}
+\end{figure}
+Donc, maitriser ces images fantômes en utilisant un noyau convolutif adéquat est une tâche cruciale pour certaines applications.
+%%
+\subsection{Zoom sur l'image centrale et les images fantômes}
+%
+Pour référence, on peut procède à la différence des deux images de la figure \ref{fig-FXlarge}, pour zoomer sur l'image centrale et sur l'image fantôme de droite pour estimer l'effet des erreurs induites par l'usage d'un noyau "non-idéal". Le cas du noyau Lanczos-3 est montré sur la figure \ref{fig-FXimagette-Lanczos3}.
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{fig21a.png}
+\includegraphics[width=0.45\textwidth]{fig21b.png}
+\caption{Image $F(x)$ obtenu en utilisant dans le domaine de Fourier le noyau Lanczos-3 à laquelle on a soustrait l'image obtenue avec le noyau idéal, et procédé à un zoom  sur l'imagette centrale et sur une image fantôme (celle de droite de Fig.~\ref{fig-FXlarge}). La LUT est restreinte à $\pm 0.003$.}
+\label{fig-FXimagette-Lanczos3}
+\end{figure}
+
+Maintenant, si l'on change le noyau de convolution, on obtient les résultats présentés sur la figure \ref{fig-FXimagette-cubique} pour le noyau cubique, sur la  figure \ref{fig-FXimagette-quinticBG} pour  le noyau de la référence \cite{2014PASP..126..287B} appelé $K_5^{bg}$ dans la section \ref{sec:BGKernels}. Ces images illustrent la motivation en fait de la référence \cite{2014PASP..126..287B} pour changer le noyau cubique par le noyau d'ordre 5 $K_5^{bg}$.
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{fig22a.png}
+\includegraphics[width=0.45\textwidth]{fig22b.png}
+\caption{Images similaires à celles de la figure \ref{fig-FXimagette-Lanczos3} en utilisant le noyau cubique en lieu et place du Lanczos-3.}
+\label{fig-FXimagette-cubique}
+\end{figure}
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{fig23a.png}
+\includegraphics[width=0.45\textwidth]{fig23b.png}
+\caption{Images similaires à celles de la figure \ref{fig-FXimagette-Lanczos3} en utilisant le noyau quintique  de la référence \cite{2014PASP..126..287B} de  en lieu et place du Lanczos-3.}
+\label{fig-FXimagette-quinticBG}
+\end{figure}
+
+Cependant, comme indiqué dans la section \ref{sec:bilan-interpol} (Tab.~\ref{tab-scoeff-bsplinecardapprox}) le noyau $K_5^{je}$ (Sec.~\ref{sec:BGKernels}) a des performances qui \textit{a priori} sont meilleures. Pour illustrer l'impact il faut changer la LUT de $\pm 0.003$ à $\pm 0.001$. Le résultat est présenté dans la figure
+\ref{fig-FXimagette-quinticJE} et montre en effet que l'impact des images fantômes est moindre en utilisant   $K_5^{je}$. 
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{fig23c.png}
+\includegraphics[width=0.45\textwidth]{fig23d.png}\\
+\includegraphics[width=0.45\textwidth]{fig24a.png}
+\includegraphics[width=0.45\textwidth]{fig24b.png}
+\caption{Images similaires à celles de la figure \ref{fig-FXimagette-Lanczos3} en utilisant les noyaux quintiques $K_5^{bg}$ et $K_5^{je}$ en changeant la LUT en comparaison de la figure \ref{fig-FXimagette-quinticBG}.}
+\label{fig-FXimagette-quinticJE}
+\end{figure}
+Qui plus est si l'on se place dans le cas d'un effet de \textit{shear} comme dans la figure \ref{fig-FXlarge3}, alors utiliser $K_5^{je}$ produit une réduction d'un facteur 10 de l'effet des images fantômes comme on peut le voir sur la figure \ref{fig-FXlarge-shear-QuniticJE} (attention à la LUT qui a été laissée libre dans les 2 images).
+\begin{figure}
+\centering
+\includegraphics[width=0.45\textwidth]{fig27.png}
+\caption{Conditions identiques à celle de la figure \ref{fig-FXlarge3} on changer le noyau Lanczos-3 par le noyau $K_5^{je}$. Attention à la LUT qui est différente entre les 2 images. L'effet des images fantômes est 10 fois plus faible dans le cas de $K_5^{je}$.}
+\label{fig-FXlarge-shear-QuniticJE}
+\end{figure}
 %
 \section{Résumé}
 % 
-
+Dans cette note que l'on peut considérer comme longue et aurait pu être scinder en deux, j'ai repris en détails l'article de \cite{2014PASP..126..287B}.
 %%%%%%%%%%
 \newpage
 \addcontentsline{toc}{section}{Références}
