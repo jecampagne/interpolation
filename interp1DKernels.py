@@ -70,7 +70,7 @@ def hatBsplineCard5(u):
   return hatBspline5(u)/(b0 + 2*b1*np.cos(2*piu) +2*b2*np.cos(4*piu))
 
 ###
-# Lanczos interpolant of degree m as well as the background conservation corrected version
+# Lanczos interpolant of degree m as well as the background conservation corrected version (1st order)
 ###
 def box(x):
   x = np.abs(x)
@@ -268,8 +268,39 @@ def hat5JE(u):
                + 5.*(-3. + 5.*pi2)*s))/(-15. + pi2)
 
 
+###
+# JE: 7-th order (septic) piecewise ploynomial interpolant of the same familly of h5GB & h5JE
+def h7JE(x):
+  x = np.abs(x)
+  def p1(x): # x<1
+    x2 = x * x
+    return 1 + (x**2*(-196 + x**2*(-959 + x*(2569 + x*(-2181 + 623*x)))))/144.
+  def p2(x): # 1<=x<2
+    return -((-2 + x)*(-1 + x)*(-3312 + x*(12266 + x*(-18564 + x*(13481 + x*(-4674 + 623*x))))))/240.
+  def p3(x): # 2<=x<3
+    return ((-3 + x)*(-2 + x)*(-52800 + x*(111694 + x*(-93340 + x*(38421 + x*(-7790 + 623*x))))))/720.
+  def p4(x): # 3<=x<4
+    return -((-4 + x)**4*(-3 + x)*(681 + x*(-490 + 89*x)))/720.
+  return np.piecewise(x, [x<1., (x>=1)&(x<2.), (x>=2)&(x<3.), (x>=3)&(x<4.), x>=4.],\
+             [lambda x:p1(x),lambda x:p2(x),lambda x:p3(x),lambda x:p4(x),lambda x: 0.])
+
+def hat7JE(u):
+  u = np.abs(u)
+  pi2 = np.pi * np.pi
+  piu = np.pi * u
+  piu2 = piu*piu
+  c = np.cos(piu)
+  ss = np.sin(piu)
+  s = np.sinc(u)
+  s2 = s*s
+  s4 = s2*s2
+  s7 = s*s2*s4
+  return s7*(2*(-933+58*piu2)*c + (1869-734*piu2)*s)/3.
+
+
 ##### 
 # Magic Kernel used in Facebook & Instagram https://johncostella.com/magic/mks.pdf
+# JE: this is an approx of B-Spline cardinal
 def mks2021(x):
   x = np.abs(x)
   def p1(x): # x<1/2

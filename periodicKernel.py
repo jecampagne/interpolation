@@ -31,7 +31,7 @@ lanczos3Wrapped = partial(lanczosWrapped,m=3)
 lanczos5Wrapped = partial(lanczosWrapped,m=5)
 
 ###
-# Approx using the Lanczos-m (renormalized) kernel
+# Approx 1st order of Lanczos-m (renormalized) kernel
 ###
 def lanczosRenorm_p(x,m,N):
   x = np.abs(x)
